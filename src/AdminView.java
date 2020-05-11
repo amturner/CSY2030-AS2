@@ -1,18 +1,38 @@
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 public class AdminView extends View {
-	private JLabel label;
-	private JButton logoutButton;
+	private JTabbedPane tabbedPane = new JTabbedPane();
+	private JPanel viewBranchesPanel, addBranchPanel, settingsPanel;
+	private JPanel userDetailsLabelPanel, userDetailsPanel, branchDetailsLabelPanel, branchDetailsPanel, addBranchButtonPanel;
+	private JLabel branchesLabel, userDetailsLabel, branchDetailsLabel, usernameLabel, passwordLabel, nameLabel, phoneLabel, emailLabel;
+	private JList branchesList;
+	private JScrollPane scrollPane;
+	private JTextField usernameField, nameField, phoneField, emailField;
+	private JPasswordField passwordField;
+	private JButton logoutButton, addBranchButton, editBranchButton, deleteBranchButton;
+	
 	private AdminController controller;
 	private AdminModel model;
 	
 	// Action Constants
-	public static final String LOGOUT = "Log out";
+	public static final String LOGOUT = "Log out", ADD_BRANCH = "Add Branch", EDIT_BRANCH = "Edit Branch", DELETE_BRANCH = "Delete Branch";
 	
 	public AdminView(AdminController controller, AdminModel model) {
 		this.controller = controller;
@@ -20,17 +40,162 @@ public class AdminView extends View {
 		
 		this.controller.addView(this);
 		
-		frame.setSize(500, 300);
+		frame.setSize(500, 325);
+		frame.setResizable(false);
 		frame.setLayout(new FlowLayout());
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		
-		label = new JLabel("Admin View");
 		logoutButton = new JButton(LOGOUT);
 		logoutButton.addActionListener(controller);
 		
-		frame.add(label);
-		frame.add(logoutButton);
+		// View Branches Panel
+		viewBranchesPanel = new JPanel();
+		viewBranchesPanel.setPreferredSize(new Dimension(475, 255));
+		
+		branchesLabel = new JLabel("Branches");
+		branchesList = new JList(model.getBranchChoices());
+		branchesList.setSelectionMode(JList.VERTICAL);
+		branchesList.setLayoutOrientation(JList.VERTICAL);
+		branchesList.setVisibleRowCount(-1);
+		scrollPane = new JScrollPane(branchesList);
+		scrollPane.setPreferredSize(new Dimension(250, 80));
+		editBranchButton = new JButton(EDIT_BRANCH);
+		editBranchButton.addActionListener(controller);
+		deleteBranchButton = new JButton(DELETE_BRANCH);
+		deleteBranchButton.addActionListener(controller);
+		
+		viewBranchesPanel.add(branchesLabel);
+		viewBranchesPanel.add(scrollPane);
+		viewBranchesPanel.add(editBranchButton);
+		viewBranchesPanel.add(deleteBranchButton);
+		
+		// Add Branch Panel
+		addBranchPanel = new JPanel();
+		addBranchPanel.setPreferredSize(new Dimension(475, 255));
+		
+		userDetailsLabelPanel = new JPanel();
+		userDetailsLabelPanel.setPreferredSize(new Dimension(475, 25));
+		userDetailsLabel = new JLabel("User Details");
+		userDetailsLabelPanel.add(userDetailsLabel);
+		usernameLabel = new JLabel("Username");
+		usernameField = new JTextField(20);
+		passwordLabel = new JLabel("Password");
+		passwordField = new JPasswordField(20);
+		
+		branchDetailsLabelPanel = new JPanel();
+		branchDetailsLabelPanel.setPreferredSize(new Dimension(475, 25));
+		branchDetailsLabel = new JLabel("Branch Details");
+		branchDetailsLabelPanel.add(branchDetailsLabel);
+		nameLabel = new JLabel("Name");
+		nameField = new JTextField(20);
+		phoneLabel = new JLabel("Phone");
+		phoneField = new JTextField(20);
+		emailLabel = new JLabel("Email");
+		emailField = new JTextField(20);
+		
+		userDetailsPanel = new JPanel();
+		userDetailsPanel.setPreferredSize(new Dimension(300, 60));
+		userDetailsPanel.add(usernameLabel);
+		userDetailsPanel.add(usernameField);
+		userDetailsPanel.add(passwordLabel);
+		userDetailsPanel.add(passwordField);
+		
+		branchDetailsPanel = new JPanel();
+		branchDetailsPanel.setPreferredSize(new Dimension(300, 75));
+		branchDetailsPanel.add(nameLabel);
+		branchDetailsPanel.add(nameField);
+		branchDetailsPanel.add(phoneLabel);
+		branchDetailsPanel.add(phoneField);
+		branchDetailsPanel.add(emailLabel);
+		branchDetailsPanel.add(emailField);
+		
+		addBranchButtonPanel = new JPanel();
+		addBranchButtonPanel.setPreferredSize(new Dimension(475, 35));
+		addBranchButton = new JButton(ADD_BRANCH);
+		addBranchButton.addActionListener(controller);
+		addBranchButtonPanel.add(addBranchButton);
+		
+		addBranchPanel.add(userDetailsLabelPanel);
+		addBranchPanel.add(userDetailsPanel);
+		addBranchPanel.add(branchDetailsLabelPanel);
+		addBranchPanel.add(branchDetailsPanel);
+		addBranchPanel.add(addBranchButtonPanel);
+		
+		// Settings Panel
+		settingsPanel = new JPanel();
+		settingsPanel.setPreferredSize(new Dimension(475, 255));
+		settingsPanel.add(logoutButton);
+		
+		tabbedPane.addTab("View Branches", null, viewBranchesPanel, "View Branches");
+		tabbedPane.addTab("Add New Branch", null, addBranchPanel, "Add New Branch");
+		tabbedPane.addTab("Settings", null, settingsPanel, "Settings");
+		
+		frame.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				NationalSalesSystem.saveUsers();
+			}
+		});
+		
+		frame.add(tabbedPane);
 		frame.setVisible(true);
+	}
+	
+	public void addBranch() {
+		if (!usernameField.getText().isEmpty()) {
+			if (!String.valueOf(passwordField.getPassword()).isEmpty()) {
+				if (!nameField.getText().isEmpty()) {
+					if (!phoneField.getText().isEmpty()) {
+						if (!emailField.getText().isEmpty()) {
+							// Add new branch to system.
+							NationalSalesSystem.addBranch(usernameField.getText(), String.valueOf(passwordField.getPassword()), nameField.getText(), phoneField.getText(), emailField.getText());
+							
+							// Clear form fields.
+							usernameField.setText("");
+							passwordField.setText("");
+							nameField.setText("");
+							phoneField.setText("");
+							emailField.setText("");
+							
+							// Display success dialog.
+							JOptionPane.showMessageDialog(null, "The branch was successfully added!", "Branch Added", JOptionPane.INFORMATION_MESSAGE);
+							
+							// Update view branches list with latest data.
+							branchesList.setListData(model.getBranchChoices());
+						}
+						else {
+							// Display error dialog.
+							JOptionPane.showMessageDialog(null, "You have not entered an email address.", "Error", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+					else {
+						// Display error dialog.
+						JOptionPane.showMessageDialog(null, "You have not entered a phone number.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				else {
+					// Display error dialog.
+					JOptionPane.showMessageDialog(null, "You have not entered a branch name.", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			else {
+				// Display error dialog.
+				JOptionPane.showMessageDialog(null, "You have not entered a password.", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		else {
+			// Display error dialog.
+			JOptionPane.showMessageDialog(null, "You have not entered a username.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	public void updateBranch() {
+		
+	}
+	
+	public void deleteBranch() {
+		int userId = model.getBranches().get(branchesList.getSelectedIndex()).getId();
+		NationalSalesSystem.deleteUser(userId);
+		branchesList.setListData(model.getBranchChoices());
 	}
 	
 	public void logout() {

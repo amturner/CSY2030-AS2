@@ -7,6 +7,9 @@ import java.util.ArrayList;
 public class NationalSalesSystem {
 	private static ArrayList<User> users = new ArrayList<User>();
 	
+	// User Filter Constants
+	public static final String ALL_USERS = "All Users", ADMINISTRATORS = "Administrators", BRANCHES = "Branches";
+	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		
@@ -52,8 +55,34 @@ public class NationalSalesSystem {
 	}
 	
 	// Method for retrieving all users currently in the system.
-	public static ArrayList<User> getUsers() {
-		return users;
+	public static ArrayList<User> getUsers(String filter) {
+		ArrayList<User> returnedUsers = null;
+		if (filter.equals(ALL_USERS))
+			returnedUsers = users;
+		else if (filter.equals(ADMINISTRATORS)) {
+			ArrayList<User> administrators = new ArrayList<User>();
+			
+			for (User user: users) {
+				if (user.getUserType().equals(User.ADMIN)) {
+					administrators.add(user);
+				}
+			}
+			
+			returnedUsers = administrators;
+		}
+		else if (filter.equals(BRANCHES)) {
+			ArrayList<User> branches = new ArrayList<User>();
+			
+			for (User user: users) {
+				if (user.getUserType().equals(User.BRANCH)) {
+					branches.add(user);
+				}
+			}
+			
+			returnedUsers = branches;
+		}
+		
+		return returnedUsers;
 	}
 	
 	// Method for adding an administrator account to the system.
@@ -73,6 +102,24 @@ public class NationalSalesSystem {
 				users.remove(i);
 				break;
 			}
+		}
+	}
+	
+	// Method for saving users in the system to a file.
+	public static void saveUsers() {
+		try {
+			FileOutputStream fos = new FileOutputStream("users.dat");
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			
+			for (User user: users) {
+				oos.writeObject(user);		
+			}
+			
+			oos.close();
+		} 
+		catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
 		}
 	}
 }

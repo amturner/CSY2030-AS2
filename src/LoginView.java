@@ -68,7 +68,7 @@ public class LoginView extends View {
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				model.saveUsers();
+				NationalSalesSystem.saveUsers();
 			}
 		});
 		

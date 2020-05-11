@@ -19,6 +19,17 @@ public class AdminController extends Controller {
 					
 				}
 			}
+			
+			if (e.getActionCommand().contentEquals(AdminView.ADD_BRANCH)) {
+				try {
+					AdminView adminView = (AdminView) view;
+					adminView.addBranch();
+					break;
+				}
+				catch (Exception e1) {
+					
+				}
+			}
 		}
 	}
 }

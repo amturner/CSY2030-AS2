@@ -7,7 +7,7 @@ public class LoginModel {
 	private User loggedInUser;
 	
 	public LoginModel() {
-		users = NationalSalesSystem.getUsers();
+		users = NationalSalesSystem.getUsers(NationalSalesSystem.ALL_USERS);
 	}
 	
 	public boolean doesUserExist(String username) {
@@ -39,22 +39,5 @@ public class LoginModel {
 	
 	public User getLoggedInUser() {
 		return loggedInUser;
-	}
-	
-	public void saveUsers() {
-		try {
-			FileOutputStream fos = new FileOutputStream("users.dat");
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			
-			for (User user: users) {
-				oos.writeObject(user);		
-			}
-			
-			oos.close();
-		} 
-		catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-		}
 	}
 }
