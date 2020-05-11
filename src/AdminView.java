@@ -20,7 +20,7 @@ import javax.swing.WindowConstants;
 public class AdminView extends View {
 	private JTabbedPane tabbedPane = new JTabbedPane();
 	private JPanel viewBranchesPanel, addBranchPanel, settingsPanel;
-	private JPanel userDetailsLabelPanel, userDetailsPanel, branchDetailsLabelPanel, branchDetailsPanel, addBranchButtonPanel;
+	private JPanel branchesLabelPanel, userDetailsLabelPanel, userDetailsPanel, branchDetailsLabelPanel, branchDetailsPanel, branchesButtonPanel, addBranchButtonPanel;
 	private JLabel branchesLabel, userDetailsLabel, branchDetailsLabel, usernameLabel, passwordLabel, nameLabel, phoneLabel, emailLabel;
 	private JList branchesList;
 	private JScrollPane scrollPane;
@@ -41,6 +41,7 @@ public class AdminView extends View {
 		this.controller.addView(this);
 		
 		frame.setSize(500, 325);
+		frame.setTitle(programTitle + " - Administration Area");
 		frame.setResizable(false);
 		frame.setLayout(new FlowLayout());
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -52,22 +53,29 @@ public class AdminView extends View {
 		viewBranchesPanel = new JPanel();
 		viewBranchesPanel.setPreferredSize(new Dimension(475, 255));
 		
+		branchesLabelPanel = new JPanel();
+		branchesLabelPanel.setPreferredSize(new Dimension(475, 25));
 		branchesLabel = new JLabel("Branches");
+		branchesLabelPanel.add(branchesLabel);
 		branchesList = new JList(model.getBranchChoices());
 		branchesList.setSelectionMode(JList.VERTICAL);
 		branchesList.setLayoutOrientation(JList.VERTICAL);
 		branchesList.setVisibleRowCount(-1);
 		scrollPane = new JScrollPane(branchesList);
-		scrollPane.setPreferredSize(new Dimension(250, 80));
+		scrollPane.setPreferredSize(new Dimension(350, 170));
+		
+		branchesButtonPanel = new JPanel();
+		branchesButtonPanel.setPreferredSize(new Dimension(475, 35));
 		editBranchButton = new JButton(EDIT_BRANCH);
 		editBranchButton.addActionListener(controller);
 		deleteBranchButton = new JButton(DELETE_BRANCH);
 		deleteBranchButton.addActionListener(controller);
+		branchesButtonPanel.add(editBranchButton);
+		branchesButtonPanel.add(deleteBranchButton);
 		
-		viewBranchesPanel.add(branchesLabel);
+		viewBranchesPanel.add(branchesLabelPanel);
 		viewBranchesPanel.add(scrollPane);
-		viewBranchesPanel.add(editBranchButton);
-		viewBranchesPanel.add(deleteBranchButton);
+		viewBranchesPanel.add(branchesButtonPanel);
 		
 		// Add Branch Panel
 		addBranchPanel = new JPanel();
@@ -146,21 +154,39 @@ public class AdminView extends View {
 				if (!nameField.getText().isEmpty()) {
 					if (!phoneField.getText().isEmpty()) {
 						if (!emailField.getText().isEmpty()) {
-							// Add new branch to system.
-							NationalSalesSystem.addBranch(usernameField.getText(), String.valueOf(passwordField.getPassword()), nameField.getText(), phoneField.getText(), emailField.getText());
-							
-							// Clear form fields.
-							usernameField.setText("");
-							passwordField.setText("");
-							nameField.setText("");
-							phoneField.setText("");
-							emailField.setText("");
-							
-							// Display success dialog.
-							JOptionPane.showMessageDialog(null, "The branch was successfully added!", "Branch Added", JOptionPane.INFORMATION_MESSAGE);
-							
-							// Update view branches list with latest data.
-							branchesList.setListData(model.getBranchChoices());
+							if (!model.isUsernameUsed(usernameField.getText())) {
+								if (!model.isPhoneUsed(phoneField.getText())) {
+									if (!model.isEmailUsed(emailField.getText())) {
+										// Add new branch to system.
+										NationalSalesSystem.addBranch(usernameField.getText(), String.valueOf(passwordField.getPassword()), nameField.getText(), phoneField.getText(), emailField.getText());
+										
+										// Display success dialog.
+										JOptionPane.showMessageDialog(null, "The branch was successfully added!", "Branch Added", JOptionPane.INFORMATION_MESSAGE);
+										
+										// Clear form fields.
+										usernameField.setText("");
+										passwordField.setText("");
+										nameField.setText("");
+										phoneField.setText("");
+										emailField.setText("");
+										
+										// Update view branches list with latest data.
+										branchesList.setListData(model.getBranchChoices());		
+									}
+									else {
+										// Display error dialog.
+										JOptionPane.showMessageDialog(null, "The email provided is already in use.", "Error", JOptionPane.ERROR_MESSAGE);
+									}	
+								}
+								else {
+									// Display error dialog.
+									JOptionPane.showMessageDialog(null, "The phone number provided is already in use.", "Error", JOptionPane.ERROR_MESSAGE);
+								}	
+							}
+							else {
+								// Display error dialog.
+								JOptionPane.showMessageDialog(null, "The username provided is already in use.", "Error", JOptionPane.ERROR_MESSAGE);
+							}
 						}
 						else {
 							// Display error dialog.
@@ -193,9 +219,24 @@ public class AdminView extends View {
 	}
 	
 	public void deleteBranch() {
-		int userId = model.getBranches().get(branchesList.getSelectedIndex()).getId();
-		NationalSalesSystem.deleteUser(userId);
-		branchesList.setListData(model.getBranchChoices());
+		if (!branchesList.isSelectionEmpty()) {
+			// Display yes no dialog.
+			int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected branch?\n\nThis will result in the lost of any associated properties.", "Error", JOptionPane.YES_NO_OPTION);
+			
+			if (choice == 0) {
+				int userId = model.getBranches().get(branchesList.getSelectedIndex()).getId();
+				NationalSalesSystem.deleteUser(userId);
+				branchesList.setListData(model.getBranchChoices());	
+				
+				
+				// Display success dialog.
+				JOptionPane.showMessageDialog(null, "The selected branch was successfully deleted!", "Branch Deleted", JOptionPane.INFORMATION_MESSAGE);
+			}	
+		}
+		else {
+			// Display error dialog.
+			JOptionPane.showMessageDialog(null, "You have not selected a branch.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	public void logout() {

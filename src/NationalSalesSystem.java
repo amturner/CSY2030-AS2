@@ -29,7 +29,7 @@ public class NationalSalesSystem {
 					users.add(new Branch(branch.getUsername(), branch.getPassword(), branch.getBranchName(), branch.getPhone(), branch.getEmail(), branch.getUserType()));
 				}
 				
-				System.out.println("Username: " + obj.getUsername() + ", Type: " + obj.getClass().getName());
+				//System.out.println("Username: " + obj.getUsername() + ", Type: " + obj.getClass().getName());
 			}
 			
 			ois.close();
@@ -42,7 +42,6 @@ public class NationalSalesSystem {
 			System.out.println(users.size() + " users loaded.");
 			System.out.println("No users currently exist. Adding admin user...");
 			addAdministrator("admin", "password");
-			addBranch("northants", "password", "Northampton", "0300 303 2772", "northampton@branch.com");
 		}	
 		else {
 			System.out.println(users.size() + " users loaded.");

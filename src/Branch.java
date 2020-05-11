@@ -55,4 +55,8 @@ public class Branch extends User {
 	public ArrayList<Property> getProperties() {
 		return properties;
 	}
+	
+	public int getPropertiesCount() {
+		return properties.size();
+	}
 }

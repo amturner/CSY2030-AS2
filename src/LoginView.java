@@ -13,7 +13,7 @@ import java.io.ObjectOutputStream;
 import javax.swing.*;
 
 public class LoginView extends View {
-	private JPanel mainPanel = new JPanel(), labelPanel = new JPanel(), formPanel = new JPanel(), statusPanel = new JPanel();
+	private JPanel labelPanel, formPanel;
 	private JLabel mainLabel, usernameLabel, passwordLabel, statusLabel;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
@@ -31,15 +31,15 @@ public class LoginView extends View {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		// Set up frame.
-		frame.setSize(355, 175);
+		frame.setSize(355, 150);
 		frame.setLocation((int) (screenSize.getWidth()-frame.getWidth())/2, (int) (screenSize.getHeight()-frame.getHeight())/2);
 		frame.setResizable(false);
 		frame.setLayout(new BorderLayout());
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-		formPanel.setPreferredSize(new Dimension(355, 85));
-		statusPanel.setPreferredSize(new Dimension(355, 35));
-		
+		labelPanel = new JPanel();
+		formPanel = new JPanel();
+		formPanel.setPreferredSize(new Dimension(355, 95));
 		
 		// Set up UI elements.
 		mainLabel = new JLabel("National Property Sales System");
@@ -59,12 +59,10 @@ public class LoginView extends View {
 		formPanel.add(passwordLabel);
 		formPanel.add(passwordField);
 		formPanel.add(loginButton);
-		statusPanel.add(statusLabel);
 		
 		// Add panels to main panel.
 		frame.add(labelPanel, BorderLayout.PAGE_START);
 		frame.add(formPanel, BorderLayout.CENTER);
-		frame.add(statusPanel, BorderLayout.PAGE_END);
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -86,7 +84,7 @@ public class LoginView extends View {
 						System.out.println("Login success");
 						frame.dispose();
 						
-						// Remove view
+						// Remove view.
 						controller.removeView(id);
 						count = count - 1;
 						
@@ -105,23 +103,23 @@ public class LoginView extends View {
 						}
 					}
 					else {
-						// Display error message.
-						statusLabel.setText("Your password is invalid.");
+						// Display error dialog.
+						JOptionPane.showMessageDialog(null, "Your password is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
 					}			
 				}
 				else {
-					// Display error message.
-					statusLabel.setText("The user requested does not exist.");
+					// Display error dialog.
+					JOptionPane.showMessageDialog(null, "The user requested does not exist.", "Error", JOptionPane.ERROR_MESSAGE);
 				}	
 			}
 			else {
-				// Display error message.
-				statusLabel.setText("You have not entered a password.");
+				// Display error dialog.
+				JOptionPane.showMessageDialog(null, "You have not entered a password.", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		else {
-			// Display error message.
-			statusLabel.setText("You have not entered a username.");
+			// Display error dialog.
+			JOptionPane.showMessageDialog(null, "You have not entered a username.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }

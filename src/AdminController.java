@@ -20,7 +20,7 @@ public class AdminController extends Controller {
 				}
 			}
 			
-			if (e.getActionCommand().contentEquals(AdminView.ADD_BRANCH)) {
+			if (e.getActionCommand().equals(AdminView.ADD_BRANCH)) {
 				try {
 					AdminView adminView = (AdminView) view;
 					adminView.addBranch();
@@ -28,6 +28,17 @@ public class AdminController extends Controller {
 				}
 				catch (Exception e1) {
 					
+				}
+			}
+			
+			if (e.getActionCommand().equals(AdminView.DELETE_BRANCH)) {
+				try {
+					AdminView adminView = (AdminView) view;
+					adminView.deleteBranch();
+					break;
+				}
+				catch (Exception e1) {
+
 				}
 			}
 		}
