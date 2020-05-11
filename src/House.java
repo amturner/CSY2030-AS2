@@ -11,6 +11,7 @@ public class House extends Property {
 		this.hasGarage = hasGarage;
 	}
 
+	// Setter Methods
 	public void setNoOfFloors(int noOfFloors) {
 		this.noOfFloors = noOfFloors;
 	}

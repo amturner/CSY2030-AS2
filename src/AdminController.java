@@ -8,11 +8,17 @@ public class AdminController extends Controller {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(e.getID());
-		
 		for (View view: views) {
-			AdminView adminView = (AdminView) view;
-			adminView.notFalse();
+			if (e.getActionCommand().equals(AdminView.LOGOUT)) {
+				try {
+					AdminView adminView = (AdminView) view;
+					adminView.logout();
+					break;
+				}
+				catch (Exception e1) {
+					
+				}
+			}
 		}
 	}
 }

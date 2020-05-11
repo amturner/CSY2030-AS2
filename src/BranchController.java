@@ -16,8 +16,13 @@ public class BranchController extends Controller {
 			if (e.getActionCommand().equals(BranchView.PRINT_BRANCH_NAME)) {
 				branchView.printBranchName();	
 			}
-			else if (e.getActionCommand().equals(BranchView.ADD_USERS)) {
+			
+			if (e.getActionCommand().equals(BranchView.ADD_PROPERTY)) {
 				branchView.addProperty();
+			}
+			
+			if (e.getActionCommand().equals(BranchView.LIST_PROPERTIES)) {
+				branchView.listProperties();
 			}
 		}
 	}

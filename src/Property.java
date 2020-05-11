@@ -23,6 +23,7 @@ public abstract class Property {
 		count = count + 1;
 	}
 	
+	// Setter Methods
 	public void setName(String name) {
 		this.name = name;
 	}

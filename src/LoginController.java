@@ -9,15 +9,13 @@ public class LoginController extends Controller {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(e.getID());
-		
 		for (View view: views) {
 			try {
 				LoginView loginView = (LoginView) view;
 				loginView.login();
 				break;
 			}
-			catch (Exception e2) {
+			catch (Exception e1) {
 				
 			}
 		}
