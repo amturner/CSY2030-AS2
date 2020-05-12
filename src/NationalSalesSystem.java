@@ -94,6 +94,37 @@ public class NationalSalesSystem {
 		users.add(new Branch(username, password, name, phone, email, User.BRANCH));
 	}
 	
+	// Method for updating a branch account without a password.
+	public static void updateBranch(int userId, String name, String phone, String email) {
+		for (int i=0; i<users.size(); i++) {
+			if (userId == users.get(i).getId()) {
+				Branch branch = (Branch) users.get(i);
+				branch.setBranchName(name);
+				branch.setPhone(phone);
+				branch.setEmail(email);
+				users.set(i, branch);
+				saveUsers();
+				break;
+			}
+		}
+	}
+	
+	// Method for updating a branch account with a password.
+	public static void updateBranch(int userId, String password, String name, String phone, String email) {
+		for (int i=0; i<users.size(); i++) {
+			if (userId == users.get(i).getId()) {
+				Branch branch = (Branch) users.get(i);
+				branch.setPassword(password);
+				branch.setBranchName(name);
+				branch.setPhone(phone);
+				branch.setEmail(email);
+				users.set(i, branch);
+				saveUsers();
+				break;
+			}
+		}
+	}
+	
 	// Method for deleting a user from the system.
 	public static void deleteUser(int id) {
 		for (int i=0; i<users.size(); i++) {
@@ -106,6 +137,7 @@ public class NationalSalesSystem {
 	
 	// Method for saving users in the system to a file.
 	public static void saveUsers() {
+		System.out.println("Saving users...");
 		try {
 			FileOutputStream fos = new FileOutputStream("users.dat");
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -115,10 +147,12 @@ public class NationalSalesSystem {
 			}
 			
 			oos.close();
+			System.out.println("Users saved.");
 		} 
 		catch (Exception e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
+			System.out.println("Users could not be saved.");
 		}
 	}
 }

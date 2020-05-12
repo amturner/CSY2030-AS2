@@ -11,6 +11,10 @@ public class AdminModel {
 		branches = NationalSalesSystem.getUsers(NationalSalesSystem.BRANCHES);
 	}
 	
+	public Branch getBranch(int index) {
+		return (Branch) branches.get(index);
+	}
+	
 	public ArrayList<User> getBranches() {
 		return branches;
 	}

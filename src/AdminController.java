@@ -31,6 +31,36 @@ public class AdminController extends Controller {
 				}
 			}
 			
+			if (e.getActionCommand().equals(AdminView.VIEW_BRANCHES)) {
+				try {
+					AdminView adminView = (AdminView) view;
+					adminView.switchCards(adminView.getPanel(AdminView.VIEW_BRANCHES_PANEL), AdminView.LIST_BRANCHES_CARD);
+				}
+				catch (Exception e1) {
+					
+				}
+			}
+			
+			if (e.getActionCommand().equals(AdminView.EDIT_BRANCH)) {
+				try {
+					AdminView adminView = (AdminView) view;
+					adminView.switchCards(adminView.getPanel(AdminView.VIEW_BRANCHES_PANEL), AdminView.EDIT_BRANCH_CARD);
+				}
+				catch (Exception e1) {
+					
+				}
+			}
+			
+			if (e.getActionCommand().equals(AdminView.UPDATE_BRANCH)) {
+				try {
+					AdminView adminView = (AdminView) view;
+					adminView.updateBranch();
+				}
+				catch (Exception e1) {
+					
+				}
+			}
+			
 			if (e.getActionCommand().equals(AdminView.DELETE_BRANCH)) {
 				try {
 					AdminView adminView = (AdminView) view;
