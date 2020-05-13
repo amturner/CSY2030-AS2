@@ -13,17 +13,6 @@ public class BranchController extends Controller {
 		
 		for (View view: views) {
 			BranchView branchView = (BranchView) view;
-			if (e.getActionCommand().equals(BranchView.PRINT_BRANCH_NAME)) {
-				branchView.printBranchName();	
-			}
-			
-			if (e.getActionCommand().equals(BranchView.ADD_PROPERTY)) {
-				branchView.addProperty();
-			}
-			
-			if (e.getActionCommand().equals(BranchView.LIST_PROPERTIES)) {
-				branchView.listProperties();
-			}
 		}
 	}
 }

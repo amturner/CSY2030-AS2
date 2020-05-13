@@ -82,7 +82,7 @@ public class AdminView extends View {
 		viewBranchesPanel.setLayout(new CardLayout());
 		viewBranchesPanel.setPreferredSize(new Dimension(475, 260));
 		
-		// View Branches Panel - List Branches
+		//// View Branches Panel - List Branches
 		listBranchesPanel = new JPanel();
 		listBranchesPanel.setPreferredSize(new Dimension(475, 260));
 		branchesLabelPanel = new JPanel();
@@ -109,7 +109,7 @@ public class AdminView extends View {
 		listBranchesPanel.add(scrollPane);
 		listBranchesPanel.add(branchesButtonPanel);
 		
-		// View Branches Panel - Edit Branch
+		//// View Branches Panel - Edit Branch
 		editBranchPanel = new JPanel();
 		editBranchPanel.setPreferredSize(new Dimension(475, 260));
 		
