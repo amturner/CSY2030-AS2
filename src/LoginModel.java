@@ -2,18 +2,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.io.*;
 
-public class LoginModel {	
-	private ArrayList<User> users;
+public class LoginModel {
 	private User loggedInUser;
-	
-	public LoginModel() {
-		users = NationalSalesSystem.getUsers(NationalSalesSystem.ALL_USERS);
-	}
 	
 	public boolean doesUserExist(String username) {
 		boolean userExists = false;
 		
-		for (User user: users) {
+		for (User user: Users.getUsers(Users.ALL_USERS)) {
 			if (username.equals(user.getUsername())) {
 				userExists = true;
 				break;
@@ -26,7 +21,7 @@ public class LoginModel {
 	public boolean validateLogin(String username, char[] password) {
 		boolean loggedIn = false;
 		
-		for (User user: users) {
+		for (User user: Users.getUsers(Users.ALL_USERS)) {
 			if (username.equals(user.getUsername()) && Arrays.equals(password, user.getPassword().toCharArray())) {
 				loggedIn = true;
 				loggedInUser = user;

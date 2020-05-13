@@ -1,41 +1,39 @@
 import java.util.ArrayList;
 
 public class AdminModel {
-	private ArrayList<User> branches;
+	private User currentUser;
 	
-	public AdminModel() {
-		fetchBranches();
-	}
-	
-	public void fetchBranches() {
-		branches = NationalSalesSystem.getUsers(NationalSalesSystem.BRANCHES);
+	public AdminModel(User currentUser) {
+		this.currentUser = currentUser;
 	}
 	
 	public Branch getBranch(int index) {
-		return (Branch) branches.get(index);
+		return (Branch) Users.getUsers(Users.BRANCHES).get(index);
 	}
 	
 	public ArrayList<User> getBranches() {
-		return branches;
+		return Users.getUsers(Users.BRANCHES);
 	}
 	
 	public String[] getBranchChoices() {
-		fetchBranches();
+		String[] branchChoices = new String[Users.getUsers(Users.BRANCHES).size()];
 		
-		String[] branchChoices = new String[branches.size()];
-		
-		for (int i=0; i<branches.size(); i++) {
-			Branch branch = (Branch) branches.get(i);
-			branchChoices[i] = "ID: " + branch.getId() + " - Name: " + branch.getBranchName() + " - Properties: " + branch.getPropertiesCount();
+		for (int i=0; i<Users.getUsers(Users.BRANCHES).size(); i++) {
+			Branch branch = (Branch) Users.getUsers(Users.BRANCHES).get(i);
+			branchChoices[i] = "ID: " + branch.getId() + " - Name: " + branch.getBranchName() + " - Phone: " + branch.getPhone() + " - Email: " + branch.getEmail() + " - Properties: " + branch.getPropertiesCount();
 		}
 		
 		return branchChoices;
 	}
 	
+	public void updatePassword(String password) {
+		Users.updatePassword(currentUser.getId(), password);
+	}
+	
 	public boolean isUsernameUsed(String username) {
 		boolean usernameFound = false;
 		
-		for (User branch: branches) {
+		for (User branch: Users.getUsers(Users.BRANCHES)) {
 			if (branch.getUsername().equals(username)) {
 				usernameFound = true;
 				break;
@@ -48,7 +46,7 @@ public class AdminModel {
 	public boolean isPhoneUsed(String phone) {
 		boolean phoneFound = false;
 		
-		for (User branch: branches) {
+		for (User branch: Users.getUsers(Users.BRANCHES)) {
 			Branch currentBranch = (Branch) branch;
 			if (currentBranch.getPhone().equals(phone)) {
 				phoneFound = true;
@@ -62,7 +60,7 @@ public class AdminModel {
 	public boolean isEmailUsed(String email) {
 		boolean emailFound = false;
 		
-		for (User branch: branches) {
+		for (User branch: Users.getUsers(Users.BRANCHES)) {
 			Branch currentBranch = (Branch) branch;
 			if (currentBranch.getEmail().equals(email)) {
 				emailFound = true;

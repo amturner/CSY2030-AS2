@@ -1,15 +1,6 @@
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 import javax.swing.*;
 
 public class LoginView extends View {
@@ -66,7 +57,7 @@ public class LoginView extends View {
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				NationalSalesSystem.saveUsers();
+				Users.saveUsers();
 			}
 		});
 		
@@ -91,7 +82,7 @@ public class LoginView extends View {
 						// Create new view instance according to user type.
 						// AdminView
 						if (model.getLoggedInUser().getUserType().equals(User.ADMIN)) {
-							AdminModel adminModel = new AdminModel();
+							AdminModel adminModel = new AdminModel(model.getLoggedInUser());
 							AdminController adminController = new AdminController(adminModel);
 							new AdminView(adminController, adminModel);	
 						}

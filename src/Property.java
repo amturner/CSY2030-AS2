@@ -2,25 +2,23 @@
 public abstract class Property {
 	protected int id;
 	protected String name;
-	protected String addrLine1, addrLine2, addrCity, addrCounty, addrCountry, addrPostcode;
+	protected String addrLine1, addrLine2, addrCity, addrCounty, addrPostcode;
 	protected int noOfRooms;
 	protected Double sellingPrice = 0.00, soldPrice = 0.00;
 	
-	protected static int count = 0;
+	protected static int nextId = 1;
 	
 	public Property(String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrCountry, String addrPostcode, int noOfRooms, Double sellingPrice) {
-		id = count + 1;
+		id = Property.nextId;
 		this.name = name;
 		this.addrLine1 = addrLine1;
 		this.addrLine2 = addrLine2;
 		this.addrCity = addrCity;
 		this.addrCounty = addrCounty;
-		this.addrCountry = addrCountry;
 		this.addrPostcode = addrPostcode;
 		this.noOfRooms = noOfRooms;
 		this.sellingPrice = sellingPrice;
-	
-		count = count + 1;
+		Property.nextId = Property.nextId + 1;
 	}
 	
 	// Setter Methods
@@ -33,7 +31,6 @@ public abstract class Property {
 		this.addrLine2 = addrLine2;
 		this.addrCity = addrCity;
 		this.addrCounty = addrCounty;
-		this.addrCountry = addrCountry;
 		this.addrPostcode = addrPostcode;
 	}
 	
@@ -72,10 +69,6 @@ public abstract class Property {
 	
 	public String getAddressCounty() {
 		return addrCounty;
-	}
-	
-	public String getAddressCountry() {
-		return addrCountry;
 	}
 	
 	public String getAddressPostcode() {

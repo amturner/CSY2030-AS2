@@ -1,15 +1,6 @@
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
-import javax.swing.WindowConstants;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
 public class BranchView extends View {
 	private JLabel label;
@@ -26,7 +17,14 @@ public class BranchView extends View {
 		
 		this.controller.addView(this);
 		
+		// Get screen size.
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		// Set up frame.
 		frame.setSize(500, 300);
+		frame.setLocation((int) (screenSize.getWidth()-frame.getWidth())/2, (int) (screenSize.getHeight()-frame.getHeight())/2);
+		frame.setTitle(frame.getTitle() + " - Branch Administration Area");
+		frame.setResizable(false);
 		frame.setLayout(new FlowLayout());
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		

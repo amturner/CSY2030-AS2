@@ -37,7 +37,7 @@ public class AdminController extends Controller {
 					adminView.switchCards(adminView.getPanel(AdminView.VIEW_BRANCHES_PANEL), AdminView.LIST_BRANCHES_CARD);
 				}
 				catch (Exception e1) {
-					
+
 				}
 			}
 			
@@ -55,6 +55,16 @@ public class AdminController extends Controller {
 				try {
 					AdminView adminView = (AdminView) view;
 					adminView.updateBranch();
+				}
+				catch (Exception e1) {
+					
+				}
+			}
+			
+			if (e.getActionCommand().contentEquals(AdminView.UPDATE_PASSWORD)) {
+				try {
+					AdminView adminView = (AdminView) view;
+					adminView.updatePassword();
 				}
 				catch (Exception e1) {
 					
