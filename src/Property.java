@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public abstract class Property {
+public abstract class Property implements Serializable {
 	protected int id;
 	protected String name;
 	protected String addrLine1, addrLine2, addrCity, addrCounty, addrPostcode;
@@ -8,7 +9,7 @@ public abstract class Property {
 	
 	protected static int nextId = 1;
 	
-	public Property(String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrCountry, String addrPostcode, int noOfRooms, Double sellingPrice) {
+	public Property(String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, Double sellingPrice) {
 		id = Property.nextId;
 		this.name = name;
 		this.addrLine1 = addrLine1;

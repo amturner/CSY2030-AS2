@@ -4,8 +4,8 @@ public class House extends Property {
 	private boolean hasGarden;
 	private boolean hasGarage;
 		
-	public House(String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrCountry, String addrPostcode, int noOfRooms, int noOfFloors, boolean hasGarden, boolean hasGarage, Double sellingPrice) {
-		super(name, addrLine1, addrLine2, addrCity, addrCounty, addrCountry, addrPostcode, noOfRooms, sellingPrice);
+	public House(String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, int noOfFloors, boolean hasGarden, boolean hasGarage, Double sellingPrice) {
+		super(name, addrLine1, addrLine2, addrCity, addrCounty, addrPostcode, noOfRooms, sellingPrice);
 		this.noOfFloors = noOfFloors;
 		this.hasGarage = hasGarden;
 		this.hasGarage = hasGarage;

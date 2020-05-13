@@ -9,7 +9,7 @@ public class AdminController extends Controller {
 	
 	public void actionPerformed(ActionEvent e) {
 		for (View view: views) {
-			if (e.getActionCommand().equals(AdminView.LOGOUT)) {
+			if (e.getActionCommand().equals(SettingsPanel.LOGOUT)) {
 				try {
 					AdminView adminView = (AdminView) view;
 					adminView.logout();
@@ -20,7 +20,7 @@ public class AdminController extends Controller {
 				}
 			}
 			
-			if (e.getActionCommand().equals(AdminView.ADD_BRANCH)) {
+			if (e.getActionCommand().equals(EditBranchPanel.ADD_BRANCH)) {
 				try {
 					AdminView adminView = (AdminView) view;
 					adminView.addBranch();
@@ -51,7 +51,7 @@ public class AdminController extends Controller {
 				}
 			}
 			
-			if (e.getActionCommand().equals(AdminView.UPDATE_BRANCH)) {
+			if (e.getActionCommand().equals(EditBranchPanel.UPDATE_BRANCH)) {
 				try {
 					AdminView adminView = (AdminView) view;
 					adminView.updateBranch();
@@ -61,7 +61,7 @@ public class AdminController extends Controller {
 				}
 			}
 			
-			if (e.getActionCommand().contentEquals(AdminView.UPDATE_PASSWORD)) {
+			if (e.getActionCommand().contentEquals(SettingsPanel.UPDATE_PASSWORD)) {
 				try {
 					AdminView adminView = (AdminView) view;
 					adminView.updatePassword();

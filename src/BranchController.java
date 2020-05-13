@@ -8,11 +8,37 @@ public class BranchController extends Controller {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		System.out.println(e.getID());
-		System.out.println(e.getActionCommand());
-		
 		for (View view: views) {
-			BranchView branchView = (BranchView) view;
+			if (e.getActionCommand().equals(SettingsPanel.LOGOUT)) {
+				try {
+					BranchView branchView = (BranchView) view;
+					branchView.logout();
+					break;
+				}
+				catch (Exception e1) {
+					
+				}
+			}
+			
+			if (e.getActionCommand().equals(SettingsPanel.UPDATE_PASSWORD)) {
+				try {
+					BranchView branchView = (BranchView) view;
+					branchView.updatePassword();
+				}
+				catch (Exception e1) {
+					
+				}
+			}
+			
+			if (e.getActionCommand().equals(EditPropertyPanel.ADD_PROPERTY)) {
+				try {
+					BranchView branchView = (BranchView) view;
+					branchView.addProperty();
+				}
+				catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
 		}
 	}
 }

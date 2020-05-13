@@ -137,6 +137,16 @@ public class Users {
 		}
 	}
 	
+	public static void updateUser(int id, User user) {
+		for (int i=0; i<users.size(); i++) {
+			if (id == users.get(i).getId()) {
+				users.set(i, user);
+				saveUsers();
+				break;
+			}
+		}
+	}
+	
 	// Method for updating a user's password.
 	public static void updatePassword(int id, String password) {
 		for (int i=0; i<users.size(); i++) {

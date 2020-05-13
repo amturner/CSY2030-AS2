@@ -23,38 +23,22 @@ public class AdminView extends View {
 	
 	// Add Branch
 	// Panels
-	private JPanel branchesLabelPanel, accountDetailsLabelPanel, accountDetailsPanel, branchDetailsLabelPanel, branchDetailsPanel, addBranchButtonPanel;
+	private JPanel branchesLabelPanel;
 	// Labels
-	private JLabel branchesLabel, accountDetailsLabel, branchDetailsLabel, usernameLabel, passwordLabel, nameLabel, phoneLabel, emailLabel;
-	// Fields
-	private JTextField usernameField, nameField, phoneField, emailField;
-	private JPasswordField passwordField;
-	//Add Buttons
-	private JButton addBranchButton;
-	
+	private JLabel branchesLabel;
+
 	// Edit Branch
 	// Panels
-	private JPanel viewBranchesButtonPanel, accountDetailsLabelPanel2, accountDetailsPanel2, branchDetailsLabelPanel2, branchDetailsPanel2, updateBranchButtonPanel;
-	// Labels
-	private JLabel accountDetailsLabel2, branchDetailsLabel2, usernameLabel2, passwordLabel2, nameLabel2, phoneLabel2, emailLabel2;
-	// Fields
-	private JTextField nameField2, phoneField2, emailField2;
-	private JPasswordField passwordField2;
+	private JPanel viewBranchesButtonPanel, editBranchFormPanel;
 	// Buttons
-	private JButton viewBranchesButton, updateBranchButton;
+	private JButton viewBranchesButton;
 	
 	// Settings
 	// Panels
-	private JPanel logoutPanel, newPasswordPanel;
-	// Labels
-	private JLabel logoutLabel, newPasswordLabel;
-	// Fields
-	private JPasswordField newPasswordField;
-	// Buttons
-	private JButton logoutButton, updatePasswordButton;
+	private JPanel settingsInnerPanel;
 	
 	// Action Constants
-	public static final String LOGOUT = "Log out", ADD_BRANCH = "Add Branch", VIEW_BRANCHES = "View Branches", EDIT_BRANCH = "Edit Branch", UPDATE_BRANCH = "Update Branch", UPDATE_PASSWORD = "Update Password", DELETE_BRANCH = "Delete Branch";
+	public static final String VIEW_BRANCHES = "View Branches", EDIT_BRANCH = "Edit Branch", DELETE_BRANCH = "Delete Branch";
 	// Panel Constants
 	public static final String VIEW_BRANCHES_PANEL = "View Branches", ADD_BRANCH_PANEL = "Add Branch", SETTINGS_PANEL = "Settings Panel";
 	// Card Constants
@@ -80,11 +64,11 @@ public class AdminView extends View {
 		// View Branches Panel
 		viewBranchesPanel = new JPanel();
 		viewBranchesPanel.setLayout(new CardLayout());
-		viewBranchesPanel.setPreferredSize(new Dimension(475, 260));
+		viewBranchesPanel.setPreferredSize(new Dimension(475, 285));
 		
 		// View Branches Panel - List Branches
 		listBranchesPanel = new JPanel();
-		listBranchesPanel.setPreferredSize(new Dimension(475, 260));
+		listBranchesPanel.setPreferredSize(new Dimension(475, 285));
 		branchesLabelPanel = new JPanel();
 		branchesLabelPanel.setPreferredSize(new Dimension(475, 25));
 		branchesLabel = new JLabel("Branches");
@@ -111,7 +95,7 @@ public class AdminView extends View {
 		
 		// View Branches Panel - Edit Branch
 		editBranchPanel = new JPanel();
-		editBranchPanel.setPreferredSize(new Dimension(475, 260));
+		editBranchPanel.setPreferredSize(new Dimension(475, 285));
 		
 		viewBranchesButtonPanel = new JPanel();
 		viewBranchesButtonPanel.setPreferredSize(new Dimension(475, 35));
@@ -119,130 +103,25 @@ public class AdminView extends View {
 		viewBranchesButton.addActionListener(controller);
 		viewBranchesButtonPanel.add(viewBranchesButton);
 		
-		accountDetailsLabelPanel2 = new JPanel();
-		accountDetailsLabelPanel2.setPreferredSize(new Dimension(475, 25));
-		accountDetailsLabel2 = new JLabel("Account Details");
-		accountDetailsLabelPanel2.add(accountDetailsLabel2);
-		passwordLabel2 = new JLabel("Password");
-		passwordField2 = new JPasswordField(20);
-		
-		branchDetailsLabelPanel2 = new JPanel();
-		branchDetailsLabelPanel2.setPreferredSize(new Dimension(475, 25));
-		branchDetailsLabel2 = new JLabel("Branch Details");
-		branchDetailsLabelPanel2.add(branchDetailsLabel2);
-		nameLabel2 = new JLabel("Name");
-		nameField2 = new JTextField(20);
-		phoneLabel2 = new JLabel("Phone");
-		phoneField2 = new JTextField(20);
-		emailLabel2 = new JLabel("Email");
-		emailField2 = new JTextField(20);
-		
-		accountDetailsPanel2 = new JPanel();
-		accountDetailsPanel2.setPreferredSize(new Dimension(300, 40));
-		accountDetailsPanel2.add(passwordLabel2);
-		accountDetailsPanel2.add(passwordField2);
-		
-		branchDetailsPanel2 = new JPanel();
-		branchDetailsPanel2.setPreferredSize(new Dimension(300, 75));
-		branchDetailsPanel2.add(nameLabel2);
-		branchDetailsPanel2.add(nameField2);
-		branchDetailsPanel2.add(phoneLabel2);
-		branchDetailsPanel2.add(phoneField2);
-		branchDetailsPanel2.add(emailLabel2);
-		branchDetailsPanel2.add(emailField2);
-		
-		updateBranchButtonPanel = new JPanel();
-		updateBranchButtonPanel.setPreferredSize(new Dimension(475, 35));
-		updateBranchButton = new JButton(UPDATE_BRANCH);
-		updateBranchButton.addActionListener(controller);
-		updateBranchButtonPanel.add(updateBranchButton);
+		editBranchFormPanel = new EditBranchPanel(EditBranchPanel.UPDATE_BRANCH);
+		((EditBranchPanel) editBranchFormPanel).addActionListener(controller);
 		
 		editBranchPanel.add(viewBranchesButton);
-		editBranchPanel.add(accountDetailsLabelPanel2);
-		editBranchPanel.add(accountDetailsPanel2);
-		editBranchPanel.add(branchDetailsLabelPanel2);
-		editBranchPanel.add(branchDetailsPanel2);
-		editBranchPanel.add(updateBranchButtonPanel);
+		editBranchPanel.add(editBranchFormPanel);
 		
 		viewBranchesPanel.add(listBranchesPanel, LIST_BRANCHES_CARD);
 		viewBranchesPanel.add(editBranchPanel, EDIT_BRANCH_CARD);
 		
 		// Add Branch Panel
-		addBranchPanel = new JPanel();
-		addBranchPanel.setPreferredSize(new Dimension(475, 260));
-		
-		accountDetailsLabelPanel = new JPanel();
-		accountDetailsLabelPanel.setPreferredSize(new Dimension(475, 25));
-		accountDetailsLabel = new JLabel("Account Details");
-		accountDetailsLabelPanel.add(accountDetailsLabel);
-		usernameLabel = new JLabel("Username");
-		usernameField = new JTextField(20);
-		passwordLabel = new JLabel("Password");
-		passwordField = new JPasswordField(20);
-		
-		branchDetailsLabelPanel = new JPanel();
-		branchDetailsLabelPanel.setPreferredSize(new Dimension(475, 25));
-		branchDetailsLabel = new JLabel("Branch Details");
-		branchDetailsLabelPanel.add(branchDetailsLabel);
-		nameLabel = new JLabel("Name");
-		nameField = new JTextField(20);
-		phoneLabel = new JLabel("Phone");
-		phoneField = new JTextField(20);
-		emailLabel = new JLabel("Email");
-		emailField = new JTextField(20);
-		
-		accountDetailsPanel = new JPanel();
-		accountDetailsPanel.setPreferredSize(new Dimension(300, 60));
-		accountDetailsPanel.add(usernameLabel);
-		accountDetailsPanel.add(usernameField);
-		accountDetailsPanel.add(passwordLabel);
-		accountDetailsPanel.add(passwordField);
-		
-		branchDetailsPanel = new JPanel();
-		branchDetailsPanel.setPreferredSize(new Dimension(300, 75));
-		branchDetailsPanel.add(nameLabel);
-		branchDetailsPanel.add(nameField);
-		branchDetailsPanel.add(phoneLabel);
-		branchDetailsPanel.add(phoneField);
-		branchDetailsPanel.add(emailLabel);
-		branchDetailsPanel.add(emailField);
-		
-		addBranchButtonPanel = new JPanel();
-		addBranchButtonPanel.setPreferredSize(new Dimension(475, 35));
-		addBranchButton = new JButton(ADD_BRANCH);
-		addBranchButton.addActionListener(controller);
-		addBranchButtonPanel.add(addBranchButton);
-		
-		addBranchPanel.add(accountDetailsLabelPanel);
-		addBranchPanel.add(accountDetailsPanel);
-		addBranchPanel.add(branchDetailsLabelPanel);
-		addBranchPanel.add(branchDetailsPanel);
-		addBranchPanel.add(addBranchButtonPanel);
+		addBranchPanel = new EditBranchPanel(EditBranchPanel.ADD_BRANCH);
+		((EditBranchPanel) addBranchPanel).addActionListener(controller);
 		
 		// Settings Panel
 		settingsPanel = new JPanel();
-		settingsPanel.setPreferredSize(new Dimension(475, 260));
-		
-		logoutPanel = new JPanel();
-		logoutPanel.setPreferredSize(new Dimension(475, 35));
-		logoutLabel = new JLabel("Want to logout?");
-		logoutButton = new JButton(LOGOUT);
-		logoutButton.addActionListener(controller);
-		logoutPanel.add(logoutLabel);
-		logoutPanel.add(logoutButton);
-		
-		newPasswordPanel = new JPanel();
-		newPasswordPanel.setPreferredSize(new Dimension(475, 35));
-		newPasswordLabel = new JLabel("New Password");
-		newPasswordField = new JPasswordField(16);
-		updatePasswordButton = new JButton(UPDATE_PASSWORD);
-		updatePasswordButton.addActionListener(controller);
-		newPasswordPanel.add(newPasswordLabel);
-		newPasswordPanel.add(newPasswordField);
-		newPasswordPanel.add(updatePasswordButton);
-		
-		settingsPanel.add(logoutPanel);
-		settingsPanel.add(newPasswordPanel);
+		settingsPanel.setPreferredSize(new Dimension(475, 285));
+		settingsInnerPanel = new SettingsPanel();
+		((SettingsPanel) settingsInnerPanel).addActionListener(controller);
+		settingsPanel.add(settingsInnerPanel);
 		
 		// Add main panels to tabbed pane.
 		tabbedPane.addTab("View Branches", null, viewBranchesPanel, "View Branches");
@@ -261,26 +140,22 @@ public class AdminView extends View {
 	}
 	
 	public void addBranch() {
-		if (!usernameField.getText().isEmpty()) {
-			if (!String.valueOf(passwordField.getPassword()).isEmpty()) {
-				if (!nameField.getText().isEmpty()) {
-					if (!phoneField.getText().isEmpty()) {
-						if (!emailField.getText().isEmpty()) {
-							if (!model.isUsernameUsed(usernameField.getText())) {
-								if (!model.isPhoneUsed(phoneField.getText())) {
-									if (!model.isEmailUsed(emailField.getText())) {
+		if (!((EditBranchPanel) addBranchPanel).getUsernameText().isEmpty()) {
+			if (!((EditBranchPanel) addBranchPanel).getPasswordText().isEmpty()) {
+				if (!((EditBranchPanel) addBranchPanel).getNameText().isEmpty()) {
+					if (!((EditBranchPanel) addBranchPanel).getPhoneText().isEmpty()) {
+						if (!((EditBranchPanel) addBranchPanel).getEmailText().isEmpty()) {
+							if (!model.isUsernameUsed(((EditBranchPanel) addBranchPanel).getUsernameText())) {
+								if (!model.isPhoneUsed(((EditBranchPanel) addBranchPanel).getPhoneText())) {
+									if (!model.isEmailUsed(((EditBranchPanel) addBranchPanel).getEmailText())) {
 										// Add new branch to system.
-										Users.addBranch(usernameField.getText(), String.valueOf(passwordField.getPassword()), nameField.getText(), phoneField.getText(), emailField.getText());
+										Users.addBranch(((EditBranchPanel) addBranchPanel).getUsernameText(), ((EditBranchPanel) addBranchPanel).getPasswordText(), ((EditBranchPanel) addBranchPanel).getNameText(), ((EditBranchPanel) addBranchPanel).getPhoneText(), ((EditBranchPanel) addBranchPanel).getEmailText());
 										
 										// Display success dialog.
 										JOptionPane.showMessageDialog(null, "The branch was successfully added!", "Branch Added", JOptionPane.INFORMATION_MESSAGE);
 										
 										// Clear form fields.
-										usernameField.setText("");
-										passwordField.setText("");
-										nameField.setText("");
-										phoneField.setText("");
-										emailField.setText("");
+										((EditBranchPanel) addBranchPanel).clearFields();
 										
 										// Update view branches list with latest data.
 										branchesList.setListData(model.getBranchChoices());		
@@ -328,25 +203,24 @@ public class AdminView extends View {
 	
 	public void updateBranch() {
 		Branch branch = model.getBranch(branchesList.getSelectedIndex());
-		if (!nameField2.getText().isEmpty()) {
-			if (!phoneField2.getText().isEmpty()) {
-				if (!emailField2.getText().isEmpty()) {
-					if (phoneField2.getText().equals(branch.getPhone()) || !model.isPhoneUsed(phoneField2.getText())) {
-						if (emailField2.getText().equals(branch.getEmail()) || !model.isEmailUsed(emailField2.getText())) {
+		
+		
+		if (!((EditBranchPanel) editBranchFormPanel).getNameText().isEmpty()) {
+			if (!((EditBranchPanel) editBranchFormPanel).getPhoneText().isEmpty()) {
+				if (!((EditBranchPanel) editBranchFormPanel).getEmailText().isEmpty()) {
+					if (((EditBranchPanel) editBranchFormPanel).getPhoneText().equals(branch.getPhone()) || !model.isPhoneUsed(((EditBranchPanel) editBranchFormPanel).getPhoneText())) {
+						if (((EditBranchPanel) editBranchFormPanel).getEmailText().equals(branch.getEmail()) || !model.isEmailUsed(((EditBranchPanel) editBranchFormPanel).getEmailText())) {
 							// Add new branch to system.
-							if (!String.valueOf(passwordField2.getPassword()).isEmpty())
-								Users.updateBranch(branch.getId(), String.valueOf(passwordField2.getPassword()), nameField2.getText(), phoneField2.getText(), emailField2.getText());
+							if (!((EditBranchPanel) editBranchFormPanel).getPasswordText().isEmpty())
+								Users.updateBranch(branch.getId(), ((EditBranchPanel) editBranchFormPanel).getPasswordText(), ((EditBranchPanel) editBranchFormPanel).getNameText(), ((EditBranchPanel) editBranchFormPanel).getPhoneText(), ((EditBranchPanel) editBranchFormPanel).getEmailText());
 							else
-								Users.updateBranch(branch.getId(), nameField2.getText(), phoneField2.getText(), emailField2.getText());
+								Users.updateBranch(branch.getId(), ((EditBranchPanel) editBranchFormPanel).getNameText(), ((EditBranchPanel) editBranchFormPanel).getPhoneText(), ((EditBranchPanel) editBranchFormPanel).getEmailText());
 							
 							// Display success dialog.
 							JOptionPane.showMessageDialog(null, "The branch was successfully updated!", "Branch Added", JOptionPane.INFORMATION_MESSAGE);
 							
 							// Clear form fields.
-							passwordField2.setText("");
-							nameField2.setText("");
-							phoneField2.setText("");
-							emailField2.setText("");
+							((EditBranchPanel) editBranchFormPanel).clearFields();
 							
 							// Update view branches list with latest data.
 							branchesList.setListData(model.getBranchChoices());		
@@ -381,15 +255,15 @@ public class AdminView extends View {
 	}
 	
 	public void updatePassword() {
-		if (!String.valueOf(newPasswordField.getPassword()).isEmpty()) {
+		if (!((SettingsPanel) settingsInnerPanel).getPasswordText().isEmpty()) {
 			// Update admin user's password.
-			model.updatePassword(String.valueOf(newPasswordField.getPassword()));
+			model.updatePassword(((SettingsPanel) settingsInnerPanel).getPasswordText());
 			
 			// Display success dialog.
-			JOptionPane.showMessageDialog(null, "Your password was successfully updated!", "Branch Deleted", JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Your password was successfully updated!", "Password Updated", JOptionPane.INFORMATION_MESSAGE);
 			
 			// Clear new password field.
-			newPasswordField.setText("");
+			((SettingsPanel) settingsInnerPanel).clearPasswordField();
 		}
 		else {
 			// Display error dialog.
@@ -431,9 +305,10 @@ public class AdminView extends View {
 				cardLayout.show(parent, name);
 				
 				Branch branch = model.getBranch(branchesList.getSelectedIndex());
-				nameField2.setText(branch.getBranchName());
-				phoneField2.setText(branch.getPhone());
-				emailField2.setText(branch.getEmail());
+				((EditBranchPanel) editBranchFormPanel).setUsernameText(branch.getUsername());
+				((EditBranchPanel) editBranchFormPanel).setNameText(branch.getBranchName());
+				((EditBranchPanel) editBranchFormPanel).setPhoneText(branch.getPhone());
+				((EditBranchPanel) editBranchFormPanel).setEmailText(branch.getEmail());
 			}
 			else {
 				// Display error dialog.
