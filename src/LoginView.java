@@ -88,7 +88,7 @@ public class LoginView extends View {
 						}
 						// BranchView
 						else if (model.getLoggedInUser().getUserType().equals(User.BRANCH)) {
-							Branch branchModel = (Branch) model.getLoggedInUser();
+							BranchModel branchModel = new BranchModel((Branch) model.getLoggedInUser());
 							BranchController branchController = new BranchController(branchModel);
 							new BranchView(branchController, branchModel);
 						}

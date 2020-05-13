@@ -4,7 +4,7 @@ import javax.swing.*;
 
 public class BranchView extends View {
 	private BranchController controller;
-	private Branch model;
+	private BranchModel model;
 	
 	// Tabbed Pane
 	private JTabbedPane tabbedPane = new JTabbedPane();
@@ -16,8 +16,10 @@ public class BranchView extends View {
 	private JPanel listPropertiesPanel, editHousePanel, editFlatPanel;
 	// listPropertiesPanel - Inner Panels
 	private JPanel listPropertiesLeftPanel, listPropertiesRightPanel;
+	// listPropertiesLeftPanel - Inner Panels
+	private JPanel listPropertiesButtonPanel;
 	// listPropertiesRightPanel - Inner Panels
-	private JPanel filterPanel, addressSearchPanel, addressSearchFieldsPanel, propertyTypePanel, sellingTypePanel;
+	private JPanel filterPanel, addressSearchPanel, propertyTypePanel, sellingTypePanel;
 	// List
 	private JList propertiesList;
 	private JScrollPane scrollPane;
@@ -58,7 +60,7 @@ public class BranchView extends View {
 	// Action Constants
 	public static final String PRINT_BRANCH_NAME = "Print Branch Name", ADD_PROPERTY = "Add Property", LIST_PROPERTIES = "List Properties";
 	
-	public BranchView(BranchController controller, Branch model) {
+	public BranchView(BranchController controller, BranchModel model) {
 		this.controller = controller;
 		this.model = model;
 		
@@ -68,7 +70,7 @@ public class BranchView extends View {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		// Set up frame.
-		frame.setSize(525, 340);
+		frame.setSize(500, 340);
 		frame.setLocation((int) (screenSize.getWidth()-frame.getWidth())/2, (int) (screenSize.getHeight()-frame.getHeight())/2);
 		frame.setTitle(frame.getTitle() + " - Branch Administration Area");
 		frame.setResizable(false);
@@ -81,18 +83,35 @@ public class BranchView extends View {
 		viewPropertiesPanel.setLayout(new CardLayout());
 		//// List Properties Panel
 		listPropertiesPanel = new JPanel();
+		listPropertiesPanel.setLayout(new BorderLayout());
 		listPropertiesPanel.setPreferredSize(new Dimension(frame.getWidth()-25, 275));
 
 		////// List Properties Panel - Inner Left
 		listPropertiesLeftPanel = new JPanel();
-		listPropertiesLeftPanel.setSize(new Dimension(frame.getWidth()/2, 340));
-		listPropertiesLeftPanel.setBackground(Color.red);
+		listPropertiesLeftPanel.setPreferredSize(new Dimension(frame.getWidth()/2, 275));
 		//////// List Properties Panel - Inner Left - Elements
+		propertyListingsLabel = new JLabel("Listings by branch '" + model.getBranchName() + "'");
+		propertiesList = new JList(model.getPropertyChoices());
+		propertiesList.setSelectionMode(JList.VERTICAL);
+		propertiesList.setLayoutOrientation(JList.VERTICAL);
+		propertiesList.setVisibleRowCount(-1);
+		scrollPane = new JScrollPane(propertiesList);
+		scrollPane.setPreferredSize(new Dimension(215, 200));
+		listPropertiesButtonPanel = new JPanel();
+		editPropertyButton = new JButton("Edit");
+		deletePropertyButton = new JButton("Delete");
+		sellPropertyButton = new JButton("Sell");
+		listPropertiesButtonPanel.add(editPropertyButton);
+		listPropertiesButtonPanel.add(deletePropertyButton);
+		listPropertiesButtonPanel.add(sellPropertyButton);
+
+		listPropertiesLeftPanel.add(propertyListingsLabel);
+		listPropertiesLeftPanel.add(scrollPane);
+		listPropertiesLeftPanel.add(listPropertiesButtonPanel);
 		
 		////// List Properties Panel - Inner Right
 		listPropertiesRightPanel = new JPanel();
 		listPropertiesRightPanel.setPreferredSize(new Dimension(frame.getWidth()/2, 275));
-		listPropertiesRightPanel.setBackground(Color.green);
 		//////// List Properties Panel - Inner Right - Filter Elements
 		filterPanel = new JPanel();
 		filterPanel.setLayout(new BorderLayout());
@@ -148,8 +167,8 @@ public class BranchView extends View {
 		listPropertiesRightPanel.add(addressSearchPanel);
 
 		// Add inner panels to main list properties panel.
-		listPropertiesPanel.add(listPropertiesLeftPanel);
-		listPropertiesPanel.add(listPropertiesRightPanel);
+		listPropertiesPanel.add(listPropertiesLeftPanel, BorderLayout.WEST);
+		listPropertiesPanel.add(listPropertiesRightPanel, BorderLayout.EAST);
 		
 		// Add list properties panel to view properties panel.
 		viewPropertiesPanel.add(listPropertiesPanel);
