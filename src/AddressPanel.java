@@ -54,6 +54,14 @@ public class AddressPanel extends JPanel {
 		postcodeField.setText(text);
 	}
 	
+	public void inputsEnabled(boolean value) {
+		line1Field.setEnabled(value);
+		line2Field.setEnabled(value);
+		cityField.setEnabled(value);
+		countyField.setEnabled(value);
+		postcodeField.setEnabled(value);
+	}
+	
 	// Getter Methods
 	public String getLine1Text() {
 		return line1Field.getText();

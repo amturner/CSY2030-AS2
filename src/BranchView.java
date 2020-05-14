@@ -519,6 +519,12 @@ public class BranchView extends View {
 							flat.getSellingPrice(), flat.getSoldPrice(), flat.getAddressLine1(), flat.getAddressLine2(), 
 							flat.getAddressCity(), flat.getAddressCounty(), flat.getAddressPostcode());
 				}
+				
+				if (property.getSoldPrice() > 0.0)
+					editPropertyInnerPanel.propertySold(true);
+				else
+					editPropertyInnerPanel.propertySold(false);
+					
 			}
 			else {
 				// Display error dialog.

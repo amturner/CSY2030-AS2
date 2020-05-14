@@ -23,10 +23,13 @@ public class EditPropertyPanel extends JPanel {
 	// Buttons
 	private JButton submitButton;
 	
+	private String panelType;
+	
 	// Type Constants
 	public static final String HOUSE = "House", FLAT = "Flat";
 	// Action Constants
 	public static final String ADD_PROPERTY = "Add Property", UPDATE_PROPERTY = "Update Property";
+	
 	
 	public EditPropertyPanel(String type) {
 		setupPanel();
@@ -209,6 +212,8 @@ public class EditPropertyPanel extends JPanel {
 	}
 	
 	public void setSelectedType(String type) {
+		panelType = type;
+		
 		if (type.equals(HOUSE)) {
 			houseRadioButton.setSelected(true);
 			flatRadioButton.setSelected(false);
@@ -223,6 +228,49 @@ public class EditPropertyPanel extends JPanel {
 	
 	public void addActionListener(ActionListener listener) {
 		submitButton.addActionListener(listener);
+	}
+	
+	public void propertySold(boolean value) {
+		if (panelType != null) {
+			if (value) {
+				nameField.setEnabled(false);
+				noOfRoomsField.setEnabled(false);
+				noOfFloorsField.setEnabled(false);
+				gardenCheckbox.setEnabled(false);
+				garageCheckbox.setEnabled(false);
+				floorNoField.setEnabled(false);
+				monthlyChargeField.setEnabled(false);
+				sellingPriceField.setEnabled(false);
+				((AddressPanel) addressPanel).inputsEnabled(false);
+				submitButton.setEnabled(false);	
+			}
+			else {
+				nameField.setEnabled(true);
+				noOfRoomsField.setEnabled(true);
+				
+				if (panelType.equals(HOUSE)) {
+					noOfFloorsField.setEnabled(true);
+					gardenCheckbox.setEnabled(true);
+					garageCheckbox.setEnabled(true);
+					floorNoField.setEnabled(false);
+					monthlyChargeField.setEnabled(false);
+				}
+				else if (panelType.equals(FLAT)) {
+					noOfFloorsField.setEnabled(false);
+					gardenCheckbox.setEnabled(false);
+					garageCheckbox.setEnabled(false);
+					floorNoField.setEnabled(true);
+					monthlyChargeField.setEnabled(true);
+				}
+				
+				sellingPriceField.setEnabled(true);
+				((AddressPanel) addressPanel).inputsEnabled(true);
+				submitButton.setEnabled(true);	
+			}	
+		}
+		else {
+			System.out.println("The panel type has not yet been set.");
+		}
 	}
 	
 	public void clear() {
