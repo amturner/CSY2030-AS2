@@ -225,6 +225,28 @@ public class EditPropertyPanel extends JPanel {
 		submitButton.addActionListener(listener);
 	}
 	
+	public void clear() {
+		// Clear Fields
+		nameField.setText("");
+		noOfRoomsField.setText("");
+		noOfFloorsField.setText("");
+		floorNoField.setText("");
+		monthlyChargeField.setText("");
+		sellingPriceField.setText("");
+		soldPriceField.setText("");
+		((AddressPanel) addressPanel).setLine1Text("");
+		((AddressPanel) addressPanel).setLine2Text("");
+		((AddressPanel) addressPanel).setCityText("");
+		((AddressPanel) addressPanel).setCountyText("");
+		((AddressPanel) addressPanel).setPostcodeText("");
+		// Clear Radio Buttons
+		houseRadioButton.setSelected(false);
+		flatRadioButton.setSelected(false);
+		// Clear Checkboxes
+		gardenCheckbox.setSelected(false);
+		garageCheckbox.setSelected(false);
+	}
+	
 	// Getter Methods
 	public String getNameText() {
 		return nameField.getText();

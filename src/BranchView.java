@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
-
+import java.util.*;
 import javax.swing.*;
 
 public class BranchView extends View {
@@ -206,6 +205,9 @@ public class BranchView extends View {
 									// Display success dialog.
 									JOptionPane.showMessageDialog(null, "The property was successfully added!", "Property Added", JOptionPane.INFORMATION_MESSAGE);
 									
+									// Clear edit property panel inputs.
+									addPropertyPanel.clear();
+									
 									// Update view properties list with latest data and according to filter.
 									applyPropertiesFilter();	
 								}
@@ -237,6 +239,9 @@ public class BranchView extends View {
 										
 										// Display success dialog.
 										JOptionPane.showMessageDialog(null, "The property was successfully added!", "Property Added", JOptionPane.INFORMATION_MESSAGE);
+										
+										// Clear edit property panel inputs.
+										addPropertyPanel.clear();
 										
 										// Update view properties list with latest data and according to filter.
 										applyPropertiesFilter();
@@ -294,6 +299,9 @@ public class BranchView extends View {
 								// Display success dialog.
 								JOptionPane.showMessageDialog(null, "The property was successfully updated!", "Property Updated", JOptionPane.INFORMATION_MESSAGE);
 							
+								// Clear edit property panel inputs.
+								editPropertyInnerPanel.clear();
+								
 								// Update view branches list with latest data.
 								applyPropertiesFilter();	
 								
@@ -329,6 +337,9 @@ public class BranchView extends View {
 									// Display success dialog.
 									JOptionPane.showMessageDialog(null, "The property was successfully updated!", "Property Updated", JOptionPane.INFORMATION_MESSAGE);
 								
+									// Clear edit property panel inputs.
+									editPropertyInnerPanel.clear();
+									
 									// Update view branches list with latest data.
 									applyPropertiesFilter();	
 									

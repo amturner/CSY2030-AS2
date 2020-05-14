@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
-import java.util.ArrayList;
 
 public class AdminView extends View {
 	private AdminController controller;
