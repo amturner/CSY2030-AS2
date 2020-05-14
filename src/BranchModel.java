@@ -16,7 +16,6 @@ public class BranchModel {
 		return currentUser.getBranchName();
 	}
 	
-	
 	// Method for retrieving a single property from the current branch.
 	public Property getProperty(int index) {
 		return currentUser.getProperty(index);
