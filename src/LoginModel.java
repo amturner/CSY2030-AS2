@@ -1,10 +1,11 @@
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.io.*;
 
 public class LoginModel {
 	private User loggedInUser;
 	
+	// Getter Methods
+	// Method for verifying if a user already exists.
 	public boolean doesUserExist(String username) {
 		boolean userExists = false;
 		
@@ -18,6 +19,7 @@ public class LoginModel {
 		return userExists;
 	}
 	
+	// Method for validating the login information provided by a user.
 	public boolean validateLogin(String username, char[] password) {
 		boolean loggedIn = false;
 		
@@ -32,6 +34,7 @@ public class LoginModel {
 		return loggedIn;
 	}
 	
+	// Method for returning the current logged in user.
 	public User getLoggedInUser() {
 		return loggedInUser;
 	}

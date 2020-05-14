@@ -9,15 +9,20 @@ public class BranchModel {
 	public BranchModel(Branch currentUser) {
 		this.currentUser = currentUser;
 	}
-	
+
+	// Getter Methods
+	// Method for returning the current branch's name.
 	public String getBranchName() {
 		return currentUser.getBranchName();
 	}
 	
+	
+	// Method for retrieving a single property from the current branch.
 	public Property getProperty(int index) {
 		return currentUser.getProperty(index);
 	}
 	
+	// Method for retrieving a list of properties from the current branch.
 	public ArrayList<Property> getProperties() {
 		return currentUser.getProperties();
 	}
@@ -81,6 +86,7 @@ public class BranchModel {
 		return filteredProperties;
 	}
 	
+	// Method for retrieving property choices for use with a JList.
 	public String[] getPropertyChoices(String propertyType, String sellingType, ArrayList<Property> properties) {
 		String[] propertyChoices = null;
 		
@@ -128,6 +134,8 @@ public class BranchModel {
 		return propertyChoices;
 	}
 	
+	// Setter Methods
+	// Methods for adding a property to the current branch.
 	public void addProperty(String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, int noOfFloors, boolean hasGarden, boolean hasGarage, Double sellingPrice) {
 		// Create new property instance with specified details.
 		Property newProperty = new House(name, addrLine1, addrLine2, addrCity, addrCounty, addrPostcode, noOfRooms, noOfFloors, hasGarden, hasGarage, sellingPrice);
@@ -136,7 +144,6 @@ public class BranchModel {
 		// Update current user.
 		updateUser();
 	}
-	
 	public void addProperty(String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, int floorNo, Double sellingPrice, Double monthlyCharge) {
 		// Create new property instance with specified details.
 		Property newProperty = new Flat(name, addrLine1, addrLine2, addrCity, addrCounty, addrPostcode, noOfRooms, floorNo, sellingPrice, monthlyCharge);
@@ -146,6 +153,7 @@ public class BranchModel {
 		updateUser();
 	}
 	
+	// Methods for updating a property in the current branch.
 	public void updateProperty(int index, String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, int noOfFloors, boolean hasGarden, boolean hasGarage, Double sellingPrice) {
 		House updatedProperty = (House) getProperty(index);
 		// Update property attributes.
@@ -161,7 +169,6 @@ public class BranchModel {
 		// Update current user.
 		updateUser();
 	}
-	
 	public void updateProperty(int index, String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, int floorNo, Double sellingPrice, Double monthlyCharge) {
 		Flat updatedProperty = (Flat) getProperty(index);
 		// Update property attributes.
@@ -177,6 +184,7 @@ public class BranchModel {
 		updateUser();
 	}
 	
+	// Method for listing a property as being "sold".
 	public void sellProperty(int index, Double price) {
 		Property updatedProperty = currentUser.getProperty(index);
 		// Update property attribute.
@@ -187,6 +195,7 @@ public class BranchModel {
 		updateUser();
 	}
 	
+	// Method for deleting a property from the current branch.
 	public void deleteProperty(int index) {
 		// Delete property from branch.
 		currentUser.deleteProperty(index);
@@ -194,10 +203,12 @@ public class BranchModel {
 		updateUser();
 	}
 	
+	// Method for updating the current user in it's entirety with the system.
 	public void updateUser() {
 		Users.updateUser(currentUser.getId(), currentUser);
 	}
 	
+	// Method for updating the current user's password with the system.
 	public void updatePassword(String password) {
 		Users.updatePassword(currentUser.getId(), password);
 	}

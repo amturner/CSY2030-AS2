@@ -9,6 +9,7 @@ public class Users {
 	// User Filter Constants
 	public static final String ALL_USERS = "All Users", ADMINISTRATORS = "Administrators", BRANCHES = "Branches";
 	
+	// Getter Methods
 	// Method for loading system users from a file.
 	public static void loadUsers() {
 		// Load users from file
@@ -55,28 +56,6 @@ public class Users {
 		}	
 	}
 	
-	// Method for saving users in the system to a file.
-	public static void saveUsers() {
-		System.out.println("Saving users...");
-		try {
-			FileOutputStream fos = new FileOutputStream(FILENAME);
-			ObjectOutputStream oos = new ObjectOutputStream(fos);
-			
-			for (User user: users) {
-				oos.writeObject(user);		
-			}
-			
-			oos.close();
-			fos.close();
-			
-			System.out.println("Users saved.");
-		} 
-		catch (IOException e) {
-			//e.printStackTrace();
-			System.out.println("Users could not be saved.");
-		}
-	}
-	
 	// Method for retrieving all users currently in the system.
 	public static ArrayList<User> getUsers(String filter) {
 		ArrayList<User> returnedUsers = null;
@@ -106,6 +85,29 @@ public class Users {
 		}
 		
 		return returnedUsers;
+	}
+	
+	// Setter Methods
+	// Method for saving users in the system to a file.
+	public static void saveUsers() {
+		System.out.println("Saving users...");
+		try {
+			FileOutputStream fos = new FileOutputStream(FILENAME);
+			ObjectOutputStream oos = new ObjectOutputStream(fos);
+			
+			for (User user: users) {
+				oos.writeObject(user);		
+			}
+			
+			oos.close();
+			fos.close();
+			
+			System.out.println("Users saved.");
+		} 
+		catch (IOException e) {
+			//e.printStackTrace();
+			System.out.println("Users could not be saved.");
+		}
 	}
 	
 	// Method for adding an administrator account to the system.

@@ -6,15 +6,6 @@ public class Branch extends User {
 	private String email;
 	private ArrayList<Property> properties = new ArrayList<Property>();
 	
-	/*
-	public Branch(int id, String username, String password, String branchName, String phone, String email, String userType) {
-		super(id, username, password, userType);
-		this.branchName = branchName;
-		this.phone = phone;
-		this.email = email;
-	}
-	*/
-	
 	public Branch(String username, String password, String branchName, String phone, String email, String userType) {
 		super(username, password, userType);
 		this.branchName = branchName;
