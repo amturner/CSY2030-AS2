@@ -217,7 +217,7 @@ public class AdminView extends View {
 								Users.updateBranch(branch.getId(), ((EditBranchPanel) editBranchFormPanel).getNameText(), ((EditBranchPanel) editBranchFormPanel).getPhoneText(), ((EditBranchPanel) editBranchFormPanel).getEmailText());
 							
 							// Display success dialog.
-							JOptionPane.showMessageDialog(null, "The branch was successfully updated!", "Branch Added", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, "The branch was successfully updated!", "Branch Updated", JOptionPane.INFORMATION_MESSAGE);
 							
 							// Clear form fields.
 							((EditBranchPanel) editBranchFormPanel).clearFields();
@@ -274,7 +274,7 @@ public class AdminView extends View {
 	public void deleteBranch() {
 		if (!branchesList.isSelectionEmpty()) {
 			// Display yes no dialog.
-			int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected branch?\n\nThis will result in the lost of any associated properties.", "Error", JOptionPane.YES_NO_OPTION);
+			int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected branch?\n\nThis will result in the lost of any associated properties.", "Delete Branch", JOptionPane.YES_NO_OPTION);
 			
 			// Delete the branch if user clicked "Yes".
 			if (choice == 0) {
@@ -340,6 +340,9 @@ public class AdminView extends View {
 		// Remove view
 		controller.removeView(id);
 		count = count - 1;
+		
+		// Print message to console.
+		System.out.println("User logged out. Displaying log in screen.");
 		
 		// Set up and display LoginView.
 		LoginModel loginModel = new LoginModel();

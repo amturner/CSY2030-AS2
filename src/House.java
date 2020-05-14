@@ -7,7 +7,7 @@ public class House extends Property {
 	public House(String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, int noOfFloors, boolean hasGarden, boolean hasGarage, Double sellingPrice) {
 		super(name, addrLine1, addrLine2, addrCity, addrCounty, addrPostcode, noOfRooms, sellingPrice);
 		this.noOfFloors = noOfFloors;
-		this.hasGarage = hasGarden;
+		this.hasGarden = hasGarden;
 		this.hasGarage = hasGarage;
 	}
 

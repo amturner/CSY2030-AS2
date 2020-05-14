@@ -27,7 +27,7 @@ public abstract class Property implements Serializable {
 		this.name = name;
 	}
 	
-	public void setAddress(String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrCountry, String addrPostcode) {
+	public void setAddress(String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode) {
 		this.addrLine1 = addrLine1;
 		this.addrLine2 = addrLine2;
 		this.addrCity = addrCity;
@@ -52,8 +52,16 @@ public abstract class Property implements Serializable {
 		return id;
 	}
 	
+	public int getNextId() {
+		return id + 1;
+	}
+	
 	public String getName() {
 		return name;
+	}
+	
+	public int getNoOfRooms() {
+		return noOfRooms;
 	}
 	
 	public String getAddressLine1() {

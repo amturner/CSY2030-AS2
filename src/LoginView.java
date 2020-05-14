@@ -72,7 +72,7 @@ public class LoginView extends View {
 			if (passwordField.getPassword().length != 0) {
 				if (model.doesUserExist(usernameField.getText())) {
 					if (model.validateLogin(usernameField.getText(), passwordField.getPassword())) {
-						System.out.println("Login success");
+						System.out.println("Login success!");
 						frame.dispose();
 						
 						// Remove view.

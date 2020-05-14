@@ -74,4 +74,11 @@ public class AddressPanel extends JPanel {
 	public String getPostcodeText() {
 		return postcodeField.getText();
 	}
+	
+	public boolean isAddressFilled() {
+		if (!getLine1Text().isEmpty() && !getLine2Text().isEmpty() && !getCityText().isEmpty() && !getCountyText().isEmpty() && !getPostcodeText().isEmpty())
+			return true;
+		else
+			return false;
+	}
 }

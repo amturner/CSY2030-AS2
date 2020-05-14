@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.*;
 
@@ -9,9 +11,9 @@ public class EditPropertyPanel extends JPanel {
 	// Inner Panels
 	private JPanel typePanel, typeInnerPanel, houseDetailsPanel, houseDetailsInnerPanel, houseDetailsInnerPanel2, flatDetailsPanel, flatDetailsInnerPanel, addressPanel;
 	// Labels
-	private JLabel propertyNameLabel, noOfRoomsLabel, typeLabel, houseDetailsLabel, noOfFloorsLabel, flatDetailsLabel, floorNoLabel, monthlyChargeLabel, priceLabel, addressLabel;
+	private JLabel propertyNameLabel, noOfRoomsLabel, typeLabel, houseDetailsLabel, noOfFloorsLabel, flatDetailsLabel, floorNoLabel, monthlyChargeLabel, sellingPriceLabel, soldPriceLabel, addressLabel;
 	// Fields
-	private JTextField nameField, noOfRoomsField, noOfFloorsField, floorNoField, monthlyChargeField, priceField;
+	private JTextField nameField, noOfRoomsField, noOfFloorsField, floorNoField, monthlyChargeField, sellingPriceField, soldPriceField;
 	// Radio Buttons
 	private JRadioButton houseRadioButton, flatRadioButton;
 	// Button Group
@@ -41,11 +43,11 @@ public class EditPropertyPanel extends JPanel {
 	
 	private void setupPanel() {
 		this.setLayout(new BorderLayout());
-		this.setPreferredSize(new Dimension(475, 300));
+		this.setPreferredSize(new Dimension(475, 335));
 		//// Edit Property - Inner Left Panel
 		editPropertyLeftPanel = new JPanel();
 		//frame.getWidth()/2
-		editPropertyLeftPanel.setPreferredSize(new Dimension(240, 275));
+		editPropertyLeftPanel.setPreferredSize(new Dimension(240, 335));
 		propertyNameLabel = new JLabel("Property Name");
 		noOfRoomsLabel = new JLabel("No. Of Rooms");
 		typeLabel = new JLabel("Type");
@@ -59,14 +61,50 @@ public class EditPropertyPanel extends JPanel {
 		noOfFloorsField = new JTextField(10);
 		floorNoField = new JTextField(10);
 		monthlyChargeField = new JTextField(10);
+		noOfFloorsField.setEnabled(false);
+		floorNoField.setEnabled(false);
+		monthlyChargeField.setEnabled(false);
 		
 		typePanel = new JPanel();
 		typeInnerPanel = new JPanel();
 		typePanel.setPreferredSize(new Dimension(110, 60));
 		typePanel.add(typeLabel);
+		
 		radioButtonGroup = new ButtonGroup();
 		houseRadioButton = new JRadioButton("House");
 		flatRadioButton = new JRadioButton("Flat");
+		houseRadioButton.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == 1) {
+					noOfFloorsField.setEnabled(true);
+					gardenCheckbox.setEnabled(true);
+					garageCheckbox.setEnabled(true);
+				}
+				else {
+					noOfFloorsField.setEnabled(false);
+					noOfFloorsField.setText("");
+					gardenCheckbox.setEnabled(false);
+					gardenCheckbox.setSelected(false);
+					garageCheckbox.setEnabled(false);
+					garageCheckbox.setSelected(false);
+				}
+			}
+		});
+		flatRadioButton.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == 1) {
+					floorNoField.setEnabled(true);
+					monthlyChargeField.setEnabled(true);
+				}
+				else {
+					floorNoField.setEnabled(false);
+					floorNoField.setText("");
+					monthlyChargeField.setEnabled(false);
+					monthlyChargeField.setText("");
+				}
+			}
+		});
+		
 		radioButtonGroup.add(houseRadioButton);
 		radioButtonGroup.add(flatRadioButton);
 		typeInnerPanel.add(houseRadioButton);
@@ -80,6 +118,8 @@ public class EditPropertyPanel extends JPanel {
 		houseDetailsPanel.add(houseDetailsLabel);
 		gardenCheckbox = new JCheckBox("Garden");
 		garageCheckbox = new JCheckBox("Garage");
+		gardenCheckbox.setEnabled(false);
+		garageCheckbox.setEnabled(false);
 		houseDetailsInnerPanel.add(noOfFloorsLabel);
 		houseDetailsInnerPanel.add(noOfFloorsField);
 		houseDetailsInnerPanel2.add(gardenCheckbox);
@@ -107,14 +147,19 @@ public class EditPropertyPanel extends JPanel {
 		editPropertyLeftPanel.add(flatDetailsPanel);
 		//// Edit Property - Inner Right Panel
 		editPropertyRightPanel = new JPanel();
-		editPropertyRightPanel.setPreferredSize(new Dimension(205, 275));
-		priceLabel = new JLabel("Price");
-		priceField = new JTextField(10);
+		editPropertyRightPanel.setPreferredSize(new Dimension(205, 335));
+		sellingPriceLabel = new JLabel("Selling Price");
+		soldPriceLabel = new JLabel("Sold Price");
+		sellingPriceField = new JTextField(10);
+		soldPriceField = new JTextField(10);
+		soldPriceField.setEnabled(false);
 		addressLabel = new JLabel("Address");
 		addressPanel = new AddressPanel();
 		submitButton = new JButton("");
-		editPropertyRightPanel.add(priceLabel);
-		editPropertyRightPanel.add(priceField);
+		editPropertyRightPanel.add(sellingPriceLabel);
+		editPropertyRightPanel.add(sellingPriceField);
+		editPropertyRightPanel.add(soldPriceLabel);
+		editPropertyRightPanel.add(soldPriceField);
 		editPropertyRightPanel.add(addressLabel);
 		editPropertyRightPanel.add(addressPanel);
 		editPropertyRightPanel.add(submitButton);
@@ -124,14 +169,15 @@ public class EditPropertyPanel extends JPanel {
 	}
 	
 	// Setter Methods
-	public void fillFields(String name, int noOfRooms, int noOfFloors, boolean hasGarden, boolean hasGarage, Double price, String line1, String line2, String city, String county, String postcode) {
+	public void fillFields(String name, int noOfRooms, int noOfFloors, boolean hasGarden, boolean hasGarage, Double sellingPrice, Double soldPrice, String line1, String line2, String city, String county, String postcode) {
 		setSelectedType(HOUSE);
 		nameField.setText(name);
 		noOfRoomsField.setText(Integer.toString(noOfRooms));
 		noOfFloorsField.setText(Integer.toString(noOfFloors));
 		setGarden(hasGarden);
 		setGarage(hasGarage);
-		priceField.setText(Double.toString(price));
+		sellingPriceField.setText(Double.toString(sellingPrice));
+		soldPriceField.setText(Double.toString(soldPrice));
 		((AddressPanel) addressPanel).setLine1Text(line1);
 		((AddressPanel) addressPanel).setLine2Text(line2);
 		((AddressPanel) addressPanel).setCityText(city);
@@ -139,13 +185,14 @@ public class EditPropertyPanel extends JPanel {
 		((AddressPanel) addressPanel).setPostcodeText(postcode);
 	}
 	
-	public void fillFields(String name, int noOfRooms, int floorNo, Double monthlyCharge, Double price, String line1, String line2, String city, String county, String postcode) {
+	public void fillFields(String name, int noOfRooms, int floorNo, Double monthlyCharge, Double sellingPrice, Double soldPrice, String line1, String line2, String city, String county, String postcode) {
 		setSelectedType(FLAT);
 		nameField.setText(name);
 		noOfRoomsField.setText(Integer.toString(noOfRooms));
 		floorNoField.setText(Integer.toString(floorNo));
 		monthlyChargeField.setText(Double.toString(monthlyCharge));
-		priceField.setText(Double.toString(price));
+		sellingPriceField.setText(Double.toString(sellingPrice));
+		soldPriceField.setText(Double.toString(soldPrice));
 		((AddressPanel) addressPanel).setLine1Text(line1);
 		((AddressPanel) addressPanel).setLine2Text(line2);
 		((AddressPanel) addressPanel).setCityText(city);
@@ -210,6 +257,7 @@ public class EditPropertyPanel extends JPanel {
 		}
 	}
 	
+	
 	public boolean getGarden() {
 		if (gardenCheckbox.isSelected())
 			return true;
@@ -226,12 +274,13 @@ public class EditPropertyPanel extends JPanel {
 	
 	public Double getPrice() {
 		try {
-			return Double.parseDouble(priceField.getText());
+			return Double.parseDouble(sellingPriceField.getText());
 		}
 		catch (NumberFormatException e) {
 			return 0.0;
 		}
 	}
+	
 	
 	public Double getMonthlyCharge() {
 		try {
@@ -241,6 +290,7 @@ public class EditPropertyPanel extends JPanel {
 			return 0.0;
 		}
 	}
+	
 	
 	public String getLine1Text() {
 		return ((AddressPanel) addressPanel).getLine1Text();
@@ -289,9 +339,6 @@ public class EditPropertyPanel extends JPanel {
 	}
 	
 	public boolean isAddressFilled() {
-		if (!getLine1Text().isEmpty() && !getLine2Text().isEmpty() && !getCityText().isEmpty() && !getCountyText().isEmpty() && !getPostcodeText().isEmpty())
-			return true;
-		else
-			return false;
+		return ((AddressPanel) addressPanel).isAddressFilled();
 	}
 }

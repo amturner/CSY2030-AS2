@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 public class BranchView extends View {
@@ -9,17 +11,18 @@ public class BranchView extends View {
 	// Tabbed Pane
 	private JTabbedPane tabbedPane = new JTabbedPane();
 	// Main Panels
-	private JPanel viewPropertiesPanel, addPropertyPanel, editPropertyPanel, settingsPanel;
-	
+	private JPanel viewPropertiesPanel, settingsPanel, editPropertyPanel;
+	private EditPropertyPanel addPropertyPanel;
 	// View Properties
 	// Panels
-	private JPanel listPropertiesPanel, editHousePanel, editFlatPanel;
+	private JPanel listPropertiesPanel;
 	// listPropertiesPanel - Inner Panels
 	private JPanel listPropertiesLeftPanel, listPropertiesRightPanel;
 	// listPropertiesLeftPanel - Inner Panels
 	private JPanel listPropertiesButtonPanel;
 	// listPropertiesRightPanel - Inner Panels
-	private JPanel filterPanel, propertyTypePanel, sellingTypePanel, addressSearchPanel;
+	private JPanel filterPanel, propertyTypePanel, sellingTypePanel;
+	private AddressPanel addressSearchPanel;
 	// List
 	private JList propertiesList;
 	private JScrollPane scrollPane;
@@ -30,13 +33,25 @@ public class BranchView extends View {
 	// Buttons
 	private JButton editPropertyButton, deletePropertyButton, sellPropertyButton, applyFilterButton, searchButton;
 	
+	
+	// Edit Property
+	// Panels
+	private EditPropertyPanel editPropertyInnerPanel;
+	// Buttons
+	private JButton viewPropertiesButton;
+	
 	// Settings
 	// Panels
-	private JPanel settingsInnerPanel;
+	private SettingsPanel settingsInnerPanel;
 	
 	
 	// Action Constants
-	public static final String EDIT_PROPERTY = "Edit", DELETE_PROPERTY = "Delete", SELL_PROPERTY = "Sell", APPLY_FILTER = "Apply Filter", ADDRESS_SEARCH = "Search";
+	public static final String VIEW_PROPERTIES = "View Properties", EDIT_PROPERTY = "Edit", DELETE_PROPERTY = "Delete", SELL_PROPERTY = "Sell", APPLY_FILTER = "Apply Filter", ADDRESS_SEARCH = "Search";
+	// Panel Constants
+	public static final String VIEW_PROPERTIES_PANEL = "View Properties", ADD_PROPERTY_PANEL = "Add Property", SETTINGS_PANEL = "Settings Panel";
+	// Card Constants
+	public static final String LIST_PROPERTIES_CARD = "List Properties", EDIT_PROPERTY_CARD = "Edit Property";
+	
 	
 	public BranchView(BranchController controller, BranchModel model) {
 		this.controller = controller;
@@ -48,7 +63,7 @@ public class BranchView extends View {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		// Set up frame.
-		frame.setSize(500, 340);
+		frame.setSize(500, 405);
 		frame.setLocation((int) (screenSize.getWidth()-frame.getWidth())/2, (int) (screenSize.getHeight()-frame.getHeight())/2);
 		frame.setTitle(frame.getTitle() + " - Branch Administration Area");
 		frame.setResizable(false);
@@ -62,14 +77,14 @@ public class BranchView extends View {
 		//// List Properties Panel
 		listPropertiesPanel = new JPanel();
 		listPropertiesPanel.setLayout(new BorderLayout());
-		listPropertiesPanel.setPreferredSize(new Dimension(frame.getWidth()-25, 275));
+		listPropertiesPanel.setPreferredSize(new Dimension(frame.getWidth()-25, 335));
 
 		////// List Properties Panel - Inner Left
 		listPropertiesLeftPanel = new JPanel();
-		listPropertiesLeftPanel.setPreferredSize(new Dimension(frame.getWidth()/2, 275));
+		listPropertiesLeftPanel.setPreferredSize(new Dimension(frame.getWidth()/2, 335));
 		//////// List Properties Panel - Inner Left - Elements
 		propertyListingsLabel = new JLabel("Listings by branch '" + model.getBranchName() + "'");
-		propertiesList = new JList(model.getPropertyChoices(model.ALL_PROPERTIES));
+		propertiesList = new JList(model.getPropertyChoices(BranchModel.ALL_PROPERTIES, BranchModel.UNSOLD, model.getProperties()));
 		propertiesList.setSelectionMode(JList.VERTICAL);
 		propertiesList.setLayoutOrientation(JList.VERTICAL);
 		propertiesList.setVisibleRowCount(-1);
@@ -93,7 +108,7 @@ public class BranchView extends View {
 		
 		////// List Properties Panel - Inner Right
 		listPropertiesRightPanel = new JPanel();
-		listPropertiesRightPanel.setPreferredSize(new Dimension(frame.getWidth()/2, 275));
+		listPropertiesRightPanel.setPreferredSize(new Dimension(frame.getWidth()/2, 335));
 		//////// List Properties Panel - Inner Right - Filter Elements
 		filterPanel = new JPanel();
 		filterPanel.setLayout(new BorderLayout());
@@ -104,7 +119,7 @@ public class BranchView extends View {
 		sellingTypePanel.setLayout(new BorderLayout());
 		propertyTypeLabel = new JLabel("Property Type");
 		sellingTypeLabel = new JLabel("Selling Type");
-		String[] propertyTypeChoices = {"All", "House", "Flat"};
+		String[] propertyTypeChoices = {"All", "Houses", "Flats"};
 		String[] sellingTypeChoices = {"Unsold", "Sold"};
 		propertyTypeDropdown = new JComboBox(propertyTypeChoices);
 		sellingTypeDropdown = new JComboBox(sellingTypeChoices);
@@ -134,11 +149,18 @@ public class BranchView extends View {
 		listPropertiesPanel.add(listPropertiesRightPanel, BorderLayout.EAST);
 		
 		// Edit Property
-		editPropertyPanel = new EditPropertyPanel(EditPropertyPanel.UPDATE_PROPERTY);
+		editPropertyPanel = new JPanel();
+		editPropertyPanel.setPreferredSize(new Dimension(475, 25));
+		viewPropertiesButton = new JButton(VIEW_PROPERTIES);
+		viewPropertiesButton.addActionListener(controller);
+		editPropertyInnerPanel = new EditPropertyPanel(EditPropertyPanel.UPDATE_PROPERTY);
+		editPropertyInnerPanel.addActionListener(controller);
+		editPropertyPanel.add(viewPropertiesButton);
+		editPropertyPanel.add(editPropertyInnerPanel);
 		
 		// Add "cards" to view properties panel.
-		viewPropertiesPanel.add(listPropertiesPanel);
-		viewPropertiesPanel.add(editPropertyPanel);
+		viewPropertiesPanel.add(listPropertiesPanel, LIST_PROPERTIES_CARD);
+		viewPropertiesPanel.add(editPropertyPanel, EDIT_PROPERTY_CARD);
 		
 		// Add Property Panel
 		addPropertyPanel = new EditPropertyPanel(EditPropertyPanel.ADD_PROPERTY);
@@ -146,7 +168,7 @@ public class BranchView extends View {
 		
 		// Settings Panel
 		settingsPanel = new JPanel();
-		settingsPanel.setPreferredSize(new Dimension(frame.getWidth()-25, 275));
+		settingsPanel.setPreferredSize(new Dimension(frame.getWidth()-25, 335));
 		settingsInnerPanel = new SettingsPanel();
 		((SettingsPanel) settingsInnerPanel).addActionListener(controller);
 		settingsPanel.add(settingsInnerPanel);
@@ -168,25 +190,24 @@ public class BranchView extends View {
 	}
 	
 	public void addProperty() {
-		if (!((EditPropertyPanel) addPropertyPanel).getNameText().isEmpty()) {
-			if ((((EditPropertyPanel) addPropertyPanel).getNoOfRooms() >= 1)) {
-				if (((EditPropertyPanel) addPropertyPanel).isRadioButtonSelected()) {
-					if (((EditPropertyPanel) addPropertyPanel).getSelectedType().equals(EditPropertyPanel.HOUSE)) {
-						if (((EditPropertyPanel) addPropertyPanel).getNoOfFloors() >= 1) {
-							if (((EditPropertyPanel) addPropertyPanel).getPrice() > 0.0) {
-								if (!((EditPropertyPanel) addPropertyPanel).isAddressFilled()) {
-									model.addProperty(((EditPropertyPanel) addPropertyPanel).getNameText(), ((EditPropertyPanel) addPropertyPanel).getLine1Text(), 
-												((EditPropertyPanel) addPropertyPanel).getLine2Text(), ((EditPropertyPanel) addPropertyPanel).getCityText(), 
-												((EditPropertyPanel) addPropertyPanel).getCountyText(), ((EditPropertyPanel) addPropertyPanel).getPostcodeText(), 
-												((EditPropertyPanel) addPropertyPanel).getNoOfRooms(), ((EditPropertyPanel) addPropertyPanel).getNoOfFloors(), 
-												((EditPropertyPanel) addPropertyPanel).getGarden(), ((EditPropertyPanel) addPropertyPanel).getGarage(), 
-												((EditPropertyPanel) addPropertyPanel).getPrice());
+		if (!addPropertyPanel.getNameText().isEmpty()) {
+			if (addPropertyPanel.getNoOfRooms() >= 1) {
+				if (addPropertyPanel.isRadioButtonSelected()) {
+					if (addPropertyPanel.getSelectedType().equals(EditPropertyPanel.HOUSE)) {
+						if (addPropertyPanel.getNoOfFloors() >= 1) {
+							if (addPropertyPanel.getPrice() > 0.0) {
+								if (addPropertyPanel.isAddressFilled()) {
+									// Add property to branch.
+									model.addProperty(addPropertyPanel.getNameText(), addPropertyPanel.getLine1Text(), addPropertyPanel.getLine2Text(), 
+												addPropertyPanel.getCityText(), addPropertyPanel.getCountyText(), addPropertyPanel.getPostcodeText(), 
+												addPropertyPanel.getNoOfRooms(), addPropertyPanel.getNoOfFloors(), addPropertyPanel.getGarden(), 
+												addPropertyPanel.getGarage(), addPropertyPanel.getPrice());
 									
 									// Display success dialog.
 									JOptionPane.showMessageDialog(null, "The property was successfully added!", "Property Added", JOptionPane.INFORMATION_MESSAGE);
 									
-									// Update view properties list with latest data.
-									propertiesList.setListData(model.getPropertyChoices(BranchModel.ALL_PROPERTIES));		
+									// Update view properties list with latest data and according to filter.
+									applyPropertiesFilter();	
 								}
 								else {
 									// Display error dialog.
@@ -196,29 +217,29 @@ public class BranchView extends View {
 							else {
 								// Display error dialog.
 								JOptionPane.showMessageDialog(null, "The price cannot be £0.", "Error", JOptionPane.ERROR_MESSAGE);
-							}
+							}	
 						}
 						else {
 							// Display error dialog.
-							JOptionPane.showMessageDialog(null, "The amount of floors cannot be 0.", "Error", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null, "The amount of floors cannot be less than 1 or is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
 						}
 					}
-					else if (((EditPropertyPanel) addPropertyPanel).getSelectedType().equals(EditPropertyPanel.FLAT)) {
-						if ((((EditPropertyPanel) addPropertyPanel).getFloorNo() > 0)) {
-							if ((((EditPropertyPanel) addPropertyPanel).getMonthlyCharge() > 0.0)) {
-								if (((EditPropertyPanel) addPropertyPanel).getPrice() > 0.0) {
-									if (!((EditPropertyPanel) addPropertyPanel).isAddressFilled()) {
-										model.addProperty(((EditPropertyPanel) addPropertyPanel).getNameText(), ((EditPropertyPanel) addPropertyPanel).getLine1Text(), 
-												((EditPropertyPanel) addPropertyPanel).getLine2Text(), ((EditPropertyPanel) addPropertyPanel).getCityText(), 
-												((EditPropertyPanel) addPropertyPanel).getCountyText(), ((EditPropertyPanel) addPropertyPanel).getPostcodeText(), 
-												((EditPropertyPanel) addPropertyPanel).getNoOfRooms(), ((EditPropertyPanel) addPropertyPanel).getFloorNo(), 
-												((EditPropertyPanel) addPropertyPanel).getPrice(), ((EditPropertyPanel) addPropertyPanel).getMonthlyCharge());
+					else if (addPropertyPanel.getSelectedType().equals(EditPropertyPanel.FLAT)) {
+						if (addPropertyPanel.getFloorNo() > 0) {
+							if (addPropertyPanel.getMonthlyCharge() > 0.0) {
+								if (addPropertyPanel.getPrice() > 0.0) {
+									if (addPropertyPanel.isAddressFilled()) {
+										// Add property to branch.
+										model.addProperty(addPropertyPanel.getNameText(), addPropertyPanel.getLine1Text(), addPropertyPanel.getLine2Text(), 
+												addPropertyPanel.getCityText(), addPropertyPanel.getCountyText(), addPropertyPanel.getPostcodeText(), 
+												addPropertyPanel.getNoOfRooms(), addPropertyPanel.getFloorNo(), addPropertyPanel.getPrice(), 
+												addPropertyPanel.getMonthlyCharge());
 										
 										// Display success dialog.
 										JOptionPane.showMessageDialog(null, "The property was successfully added!", "Property Added", JOptionPane.INFORMATION_MESSAGE);
 										
-										// Update view properties list with latest data.
-										propertiesList.setListData(model.getPropertyChoices(BranchModel.ALL_PROPERTIES));	
+										// Update view properties list with latest data and according to filter.
+										applyPropertiesFilter();
 									}
 									else {
 										// Display error dialog.
@@ -228,12 +249,12 @@ public class BranchView extends View {
 								else {
 									// Display error dialog.
 									JOptionPane.showMessageDialog(null, "The price cannot be £0.", "Error", JOptionPane.ERROR_MESSAGE);
-								}
+								}	
 							}
 							else {
 								// Display error dialog.
 								JOptionPane.showMessageDialog(null, "The monthly charge cannot be £0.", "Error", JOptionPane.ERROR_MESSAGE);
-							}
+							}	
 						}
 						else {
 							// Display error dialog.
@@ -248,8 +269,8 @@ public class BranchView extends View {
 			}
 			else {
 				// Display error dialog.
-				JOptionPane.showMessageDialog(null, "You have not entered an amount of rooms.", "Error", JOptionPane.ERROR_MESSAGE);
-			}
+				JOptionPane.showMessageDialog(null, "The amount of rooms cannot be less than 1 or is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+			}	
 		}
 		else {
 			// Display error dialog.
@@ -258,24 +279,258 @@ public class BranchView extends View {
 	}
 	
 	public void updateProperty() {
+		if (!editPropertyInnerPanel.getNameText().isEmpty()) {
+			if (editPropertyInnerPanel.getNoOfRooms() >= 1) {
+				if (editPropertyInnerPanel.getSelectedType().equals(EditPropertyPanel.HOUSE)) {
+					if (editPropertyInnerPanel.getNoOfFloors() >= 1) {
+						if (editPropertyInnerPanel.getPrice() > 0.0) {
+							if (editPropertyInnerPanel.isAddressFilled()) {
+								// Update property attributes.
+								model.updateProperty(propertiesList.getSelectedIndex(), editPropertyInnerPanel.getNameText(), editPropertyInnerPanel.getLine1Text(),
+													editPropertyInnerPanel.getLine2Text(), editPropertyInnerPanel.getCityText(), editPropertyInnerPanel.getCountyText(),
+													editPropertyInnerPanel.getPostcodeText(), editPropertyInnerPanel.getNoOfRooms(), editPropertyInnerPanel.getNoOfFloors(),
+													editPropertyInnerPanel.getGarden(), editPropertyInnerPanel.getGarage(), editPropertyInnerPanel.getPrice());
+								
+								// Display success dialog.
+								JOptionPane.showMessageDialog(null, "The property was successfully updated!", "Property Updated", JOptionPane.INFORMATION_MESSAGE);
+							
+								// Update view branches list with latest data.
+								applyPropertiesFilter();	
+								
+								// Display the list of current branches.
+								switchCards(viewPropertiesPanel, LIST_PROPERTIES_CARD);
+							}	
+							else {
+								// Display error dialog.
+								JOptionPane.showMessageDialog(null, "The address cannot be blank.", "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						}
+						else {
+							// Display error dialog.
+							JOptionPane.showMessageDialog(null, "The selling price cannot be less than 0 or is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+					else {
+						// Display error dialog.
+						JOptionPane.showMessageDialog(null, "The amount of floors cannot be less than 1 or is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				else if (editPropertyInnerPanel.getSelectedType().equals(EditPropertyPanel.FLAT)) {
+					if (editPropertyInnerPanel.getFloorNo() > 0) {
+						if (editPropertyInnerPanel.getMonthlyCharge() > 0.0) {
+							if (editPropertyInnerPanel.getPrice() > 0.0) {
+								if (editPropertyInnerPanel.isAddressFilled()) {
+									// Update property attributes.
+									model.updateProperty(propertiesList.getSelectedIndex(), editPropertyInnerPanel.getNameText(), editPropertyInnerPanel.getLine1Text(),
+														editPropertyInnerPanel.getLine2Text(), editPropertyInnerPanel.getCityText(), editPropertyInnerPanel.getCountyText(),
+														editPropertyInnerPanel.getPostcodeText(), editPropertyInnerPanel.getNoOfRooms(), editPropertyInnerPanel.getFloorNo(),
+														editPropertyInnerPanel.getPrice(), editPropertyInnerPanel.getMonthlyCharge());
+								
+									// Display success dialog.
+									JOptionPane.showMessageDialog(null, "The property was successfully updated!", "Property Updated", JOptionPane.INFORMATION_MESSAGE);
+								
+									// Update view branches list with latest data.
+									applyPropertiesFilter();	
+									
+									// Display the list of current branches.
+									switchCards(viewPropertiesPanel, LIST_PROPERTIES_CARD);
+								}
+								else {
+									// Display error dialog.
+									JOptionPane.showMessageDialog(null, "The address cannot be blank.", "Error", JOptionPane.ERROR_MESSAGE);
+								}
+							}	
+							else {
+								// Display error dialog.
+								JOptionPane.showMessageDialog(null, "The selling price cannot be less than 0 or is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+							}
+						}	
+						else {
+							// Display error dialog.
+							JOptionPane.showMessageDialog(null, "The monthly charge cannot be less than 0 or is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+						}
+					}
+					else {
+						// Display error dialog.
+						JOptionPane.showMessageDialog(null, "The floor number cannot be less than 1 or is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+			else {
+				// Display error dialog.
+				JOptionPane.showMessageDialog(null, "The amount of rooms cannot be less than 1 or is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		else {
+			// Display error dialog.
+			JOptionPane.showMessageDialog(null, "The property name cannot be empty.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	public void sellProperty() {
+		if (!propertiesList.isSelectionEmpty()) {
+			try {
+				// Ask the user for the price that the property has sold for.
+				Double soldPrice = Double.parseDouble(JOptionPane.showInputDialog(null, "How much did this property sell for?", "Sell Property", JOptionPane.QUESTION_MESSAGE));
+				
+				if (soldPrice >= model.getProperty(propertiesList.getSelectedIndex()).getSellingPrice()) {
+					// Sell property.
+					model.sellProperty(propertiesList.getSelectedIndex(), soldPrice);
+					
+					// Update view branches list with latest data.
+					applyPropertiesFilter();
+					
+					// Display success dialog.
+					JOptionPane.showMessageDialog(null, "The selected property was successfully sold for £" + soldPrice + "!", "Property Sold", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					// Display error dialog.
+					JOptionPane.showMessageDialog(null, "The selcted property cannot be sold for less than the current selling price.", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			catch (NumberFormatException e) {
+				// Display error dialog.
+				JOptionPane.showMessageDialog(null, "The price you have entered is not a number.\n\nPlease try again!", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+		else {
+			// Display error dialog.
+			JOptionPane.showMessageDialog(null, "You have not selected a property.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	public void deleteProperty() {
+		if (!propertiesList.isSelectionEmpty()) {
+			// Display yes no dialog.
+			int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected property?", "Delete Property", JOptionPane.YES_NO_OPTION);
+			
+			// Delete the branch if user clicked "Yes".
+			if (choice == 0) {
+				// Delete property from branch.
+				model.deleteProperty(propertiesList.getSelectedIndex());
 
+				// Update view branches list with latest data.
+				applyPropertiesFilter();		
+				
+				// Display success dialog.
+				JOptionPane.showMessageDialog(null, "The selected property was successfully deleted!", "Property Deleted", JOptionPane.INFORMATION_MESSAGE);
+			}	
+		}
+		else {
+			// Display error dialog.
+			JOptionPane.showMessageDialog(null, "You have not selected a property.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	public void updatePassword() {
-		if (!((SettingsPanel) settingsInnerPanel).getPasswordText().isEmpty()) {
+		if (!settingsInnerPanel.getPasswordText().isEmpty()) {
 			// Update admin user's password.
-			model.updatePassword(((SettingsPanel) settingsInnerPanel).getPasswordText());
+			model.updatePassword(settingsInnerPanel.getPasswordText());
 			
 			// Display success dialog.
 			JOptionPane.showMessageDialog(null, "Your password was successfully updated!", "Password Updated", JOptionPane.INFORMATION_MESSAGE);
 			
 			// Clear new password field.
-			((SettingsPanel) settingsInnerPanel).clearPasswordField();
+			settingsInnerPanel.clearPasswordField();
 		}
 		else {
 			// Display error dialog.
 			JOptionPane.showMessageDialog(null, "You have not entered a password.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	
+	// Method for listing properties as specified by the user's filter choices.
+	public void applyPropertiesFilter() {
+		propertiesList.setListData(model.getPropertyChoices(propertyTypeDropdown.getSelectedItem().toString(), sellingTypeDropdown.getSelectedItem().toString(), model.getProperties()));
+	}
+	
+	public void searchPropertyByAddress() {
+		ArrayList<Property> properties = null;
+		
+		if (addressSearchPanel.getLine1Text().isEmpty() && addressSearchPanel.getLine2Text().isEmpty() && addressSearchPanel.getCityText().isEmpty() &&
+			addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
+			// Update view properties list with latest data.
+			properties = model.getProperties();
+		}
+		else if (!addressSearchPanel.getLine1Text().isEmpty() && addressSearchPanel.getLine2Text().isEmpty() && addressSearchPanel.getCityText().isEmpty() &&
+				addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
+			// Update view properties list with latest data.
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text());
+		}
+		else if (!addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && addressSearchPanel.getCityText().isEmpty() &&
+				addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
+			// Update view properties list with latest data.
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine1Text());
+		}
+		else if (!addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && !addressSearchPanel.getCityText().isEmpty() &&
+				addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
+			// Update view properties list with latest data.
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine1Text(), addressSearchPanel.getCityText());
+		}
+		else if (!addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && !addressSearchPanel.getCityText().isEmpty() &&
+				!addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
+			// Update view properties list with latest data.
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine1Text(), addressSearchPanel.getCityText(),
+														addressSearchPanel.getCountyText());
+		}
+		else if (!addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && !addressSearchPanel.getCityText().isEmpty() &&
+				!addressSearchPanel.getCountyText().isEmpty() && !addressSearchPanel.getPostcodeText().isEmpty()) {
+			// Update view properties list with latest data.
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine1Text(), addressSearchPanel.getCityText(),
+														addressSearchPanel.getCountyText(), addressSearchPanel.getPostcodeText());
+		}
+		
+		propertiesList.setListData(model.getPropertyChoices(propertyTypeDropdown.getSelectedItem().toString(), sellingTypeDropdown.getSelectedItem().toString(), properties));
+	}
+	
+	// Method for switching cards on a panel with the CardLayout layout.
+	public void switchCards(Container parent, String name) {
+		if (!name.equals(EDIT_PROPERTY_CARD)) {
+			CardLayout cardLayout = (CardLayout) (parent.getLayout());
+			cardLayout.show(parent, name);
+		}
+		else {
+			if (!propertiesList.isSelectionEmpty()) {
+				CardLayout cardLayout = (CardLayout) (parent.getLayout());
+				cardLayout.show(parent, name);
+				
+				Property property = model.getProperty(propertiesList.getSelectedIndex());
+				
+				if (property.getClass().getName().equals(EditPropertyPanel.HOUSE)) {
+					House house = (House) property;
+					editPropertyInnerPanel.fillFields(house.getName(), house.getNoOfRooms(), house.getNoOfFloors(), house.propertyHasGarden(),
+							house.propertyHasGarage(), house.getSellingPrice(), house.getSoldPrice(), house.getAddressLine1(), 
+							house.getAddressLine2(), house.getAddressCity(), house.getAddressCounty(), house.getAddressPostcode());
+				}
+				else if (property.getClass().getName().equals(EditPropertyPanel.FLAT)) {
+					Flat flat = (Flat) property;
+					editPropertyInnerPanel.fillFields(flat.getName(), flat.getNoOfRooms(), flat.getFloorNo(), flat.getMonthlyCharge(),
+							flat.getSellingPrice(), flat.getSoldPrice(), flat.getAddressLine1(), flat.getAddressLine2(), 
+							flat.getAddressCity(), flat.getAddressCounty(), flat.getAddressPostcode());
+				}
+			}
+			else {
+				// Display error dialog.
+				JOptionPane.showMessageDialog(null, "You have not selected a property.", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	}
+	
+	// Method for returning a panel from the admin view.
+	public JPanel getPanel(String panel) {
+		JPanel returnedPanel = null;
+		
+		if (panel.equals(VIEW_PROPERTIES_PANEL)) {
+			returnedPanel = viewPropertiesPanel;
+		}
+		else if (panel.equals(ADD_PROPERTY_PANEL)) {
+			returnedPanel = addPropertyPanel;
+		}
+		else if (panel.equals(SETTINGS_PANEL)) {
+			returnedPanel = settingsPanel;
+		}
+		
+		return returnedPanel;
 	}
 	
 	public void logout() {
@@ -284,6 +539,9 @@ public class BranchView extends View {
 		// Remove view
 		controller.removeView(id);
 		count = count - 1;
+		
+		// Print message to console.
+		System.out.println("User logged out. Displaying log in screen.");
 		
 		// Set up and display LoginView.
 		LoginModel loginModel = new LoginModel();

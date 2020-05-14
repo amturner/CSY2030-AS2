@@ -17,6 +17,4 @@ public abstract class Controller implements ActionListener {
 			System.out.println("Index: " + views.indexOf(views.get(i)) + ", Value: " + views.get(i));
 		}
 	}
-	
-	public abstract void actionPerformed(ActionEvent e);
 }

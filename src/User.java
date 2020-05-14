@@ -12,20 +12,22 @@ public abstract class User implements Serializable {
 	// User Type Constants
 	public static final String BRANCH = "Branch", ADMIN = "Administrator"; 
 	
+	/*
 	public User(int id, String username, String password, String userType) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.userType = userType;
-		User.nextId = id + 1;
+		User.nextId = getNextId();
 	}
+	*/
 	
 	public User(String username, String password, String userType) {
 		id = User.nextId;
 		this.username = username;
 		this.password = password;
 		this.userType = userType;
-		User.nextId = User.nextId + 1;
+		User.nextId = getNextId();
 	}
 	
 	// Getter Methods
@@ -34,7 +36,7 @@ public abstract class User implements Serializable {
 	}
 	
 	public int getNextId() {
-		return nextId;
+		return id + 1;
 	}
 	
 	public String getUsername() {
