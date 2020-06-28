@@ -7,10 +7,10 @@ public abstract class Property implements Serializable {
 	protected int noOfRooms;
 	protected Double sellingPrice, soldPrice = 0.00;
 	
-	protected static int nextId = 1;
+	public static int NEXT_ID = 1;
 	
 	public Property(String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, Double sellingPrice) {
-		id = Property.nextId;
+		id = getNextId();
 		this.name = name;
 		this.addrLine1 = addrLine1;
 		this.addrLine2 = addrLine2;
@@ -19,32 +19,7 @@ public abstract class Property implements Serializable {
 		this.addrPostcode = addrPostcode;
 		this.noOfRooms = noOfRooms;
 		this.sellingPrice = sellingPrice;
-		Property.nextId = Property.nextId + 1;
-	}
-	
-	// Setter Methods
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public void setAddress(String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode) {
-		this.addrLine1 = addrLine1;
-		this.addrLine2 = addrLine2;
-		this.addrCity = addrCity;
-		this.addrCounty = addrCounty;
-		this.addrPostcode = addrPostcode;
-	}
-	
-	public void setNoOfRooms(int noOfRooms) {
-		this.noOfRooms = noOfRooms;
-	}
-	
-	public void setSellingPrice(Double sellingPrice) {
-		this.sellingPrice = sellingPrice;
-	}
-	
-	public void setSoldPrice(Double soldPrice) {
-		this.soldPrice = soldPrice;
+		setNextId(id + 1);
 	}
 	
 	// Getter Methods
@@ -53,7 +28,7 @@ public abstract class Property implements Serializable {
 	}
 	
 	public int getNextId() {
-		return id + 1;
+		return Property.NEXT_ID;
 	}
 	
 	public String getName() {
@@ -90,5 +65,34 @@ public abstract class Property implements Serializable {
 	
 	public Double getSoldPrice() {
 		return soldPrice;
+	}
+	
+	// Setter Methods
+	public void setNextId(int id) {
+		Property.NEXT_ID = id;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public void setAddress(String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode) {
+		this.addrLine1 = addrLine1;
+		this.addrLine2 = addrLine2;
+		this.addrCity = addrCity;
+		this.addrCounty = addrCounty;
+		this.addrPostcode = addrPostcode;
+	}
+	
+	public void setNoOfRooms(int noOfRooms) {
+		this.noOfRooms = noOfRooms;
+	}
+	
+	public void setSellingPrice(Double sellingPrice) {
+		this.sellingPrice = sellingPrice;
+	}
+	
+	public void setSoldPrice(Double soldPrice) {
+		this.soldPrice = soldPrice;
 	}
 }

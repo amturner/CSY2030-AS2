@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class BranchView extends View {
 	private BranchController controller;
-	private BranchModel model;
+	private Branch model;
 	
 	// Tabbed Pane
 	private JTabbedPane tabbedPane = new JTabbedPane();
@@ -52,7 +52,7 @@ public class BranchView extends View {
 	public static final String LIST_PROPERTIES_CARD = "List Properties", EDIT_PROPERTY_CARD = "Edit Property";
 	
 	
-	public BranchView(BranchController controller, BranchModel model) {
+	public BranchView(BranchController controller, Branch model) {
 		this.controller = controller;
 		this.model = model;
 		
@@ -83,7 +83,7 @@ public class BranchView extends View {
 		listPropertiesLeftPanel.setPreferredSize(new Dimension(frame.getWidth()/2, 335));
 		//////// List Properties Panel - Inner Left - Elements
 		propertyListingsLabel = new JLabel("Listings by branch '" + model.getBranchName() + "'");
-		propertiesList = new JList(model.getPropertyChoices(BranchModel.ALL_PROPERTIES, BranchModel.UNSOLD, model.getProperties()));
+		propertiesList = new JList(model.getPropertyChoices(Branch.ALL_PROPERTIES, Branch.UNSOLD, model.getProperties()));
 		propertiesList.setSelectionMode(JList.VERTICAL);
 		propertiesList.setLayoutOrientation(JList.VERTICAL);
 		propertiesList.setVisibleRowCount(-1);
@@ -179,7 +179,7 @@ public class BranchView extends View {
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				Users.saveUsers();
+				AccountManager.saveAll();
 			}
 		});
 		
@@ -436,7 +436,7 @@ public class BranchView extends View {
 	public void updatePassword() {
 		if (!settingsInnerPanel.getPasswordText().isEmpty()) {
 			// Update admin user's password.
-			model.updatePassword(settingsInnerPanel.getPasswordText());
+			model.setPassword(settingsInnerPanel.getPasswordText());
 			
 			// Display success dialog.
 			JOptionPane.showMessageDialog(null, "Your password was successfully updated!", "Password Updated", JOptionPane.INFORMATION_MESSAGE);

@@ -1,9 +1,9 @@
 import java.awt.event.ActionEvent;
 
 public class BranchController extends Controller {
-	private BranchModel model;
+	private Branch model;
 	
-	public BranchController(BranchModel model) {
+	public BranchController(Branch model) {
 		this.model = model;
 	}
 	

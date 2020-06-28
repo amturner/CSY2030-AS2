@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class AdminView extends View {
 	private AdminController controller;
-	private AdminModel model;
+	private Administrator model;
 	
 	// Tabbed Pane
 	private JTabbedPane tabbedPane = new JTabbedPane();
@@ -46,7 +46,7 @@ public class AdminView extends View {
 	// Card Constants
 	public static final String LIST_BRANCHES_CARD = "List Branches", EDIT_BRANCH_CARD = "Edit Branch";
 	
-	public AdminView(AdminController controller, AdminModel model) {
+	public AdminView(AdminController controller, Administrator model) {
 		this.controller = controller;
 		this.model = model;
 		
@@ -132,7 +132,7 @@ public class AdminView extends View {
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				Users.saveUsers();
+				AccountManager.saveAll();
 			}
 		});
 		
@@ -147,11 +147,11 @@ public class AdminView extends View {
 				if (!addBranchPanel.getNameText().isEmpty()) {
 					if (!addBranchPanel.getPhoneText().isEmpty()) {
 						if (!addBranchPanel.getEmailText().isEmpty()) {
-							if (!model.isUsernameUsed(addBranchPanel.getUsernameText())) {
-								if (!model.isPhoneUsed(addBranchPanel.getPhoneText())) {
-									if (!model.isEmailUsed(addBranchPanel.getEmailText())) {
+							if (!AccountManager.doesUserExist(addBranchPanel.getUsernameText())) {
+								if (!AccountManager.isPhoneUsed(addBranchPanel.getPhoneText())) {
+									if (!AccountManager.isEmailUsed(addBranchPanel.getEmailText())) {
 										// Add new branch to system.
-										Users.addBranch(addBranchPanel.getUsernameText(), addBranchPanel.getPasswordText(), addBranchPanel.getNameText(), addBranchPanel.getPhoneText(), addBranchPanel.getEmailText());
+										AccountManager.addBranch(addBranchPanel.getUsernameText(), addBranchPanel.getPasswordText(), addBranchPanel.getNameText(), addBranchPanel.getPhoneText(), addBranchPanel.getEmailText());
 										
 										// Display success dialog.
 										JOptionPane.showMessageDialog(null, "The branch was successfully added!", "Branch Added", JOptionPane.INFORMATION_MESSAGE);
@@ -210,13 +210,13 @@ public class AdminView extends View {
 		if (!editBranchFormPanel.getNameText().isEmpty()) {
 			if (!editBranchFormPanel.getPhoneText().isEmpty()) {
 				if (!editBranchFormPanel.getEmailText().isEmpty()) {
-					if (editBranchFormPanel.getPhoneText().equals(branch.getPhone()) || !model.isPhoneUsed(editBranchFormPanel.getPhoneText())) {
-						if (editBranchFormPanel.getEmailText().equals(branch.getEmail()) || !model.isEmailUsed(editBranchFormPanel.getEmailText())) {
+					if (editBranchFormPanel.getPhoneText().equals(branch.getPhone()) || !AccountManager.isPhoneUsed(editBranchFormPanel.getPhoneText())) {
+						if (editBranchFormPanel.getEmailText().equals(branch.getEmail()) || !AccountManager.isEmailUsed(editBranchFormPanel.getEmailText())) {
 							// Add new branch to system.
 							if (!editBranchFormPanel.getPasswordText().isEmpty())
-								Users.updateBranch(branch.getId(), editBranchFormPanel.getPasswordText(), editBranchFormPanel.getNameText(), editBranchFormPanel.getPhoneText(), editBranchFormPanel.getEmailText());
+								AccountManager.updateBranch(branch.getId(), editBranchFormPanel.getPasswordText(), editBranchFormPanel.getNameText(), editBranchFormPanel.getPhoneText(), editBranchFormPanel.getEmailText());
 							else
-								Users.updateBranch(branch.getId(), editBranchFormPanel.getNameText(), editBranchFormPanel.getPhoneText(), editBranchFormPanel.getEmailText());
+								AccountManager.updateBranch(branch.getId(), editBranchFormPanel.getNameText(), editBranchFormPanel.getPhoneText(), editBranchFormPanel.getEmailText());
 							
 							// Display success dialog.
 							JOptionPane.showMessageDialog(null, "The branch was successfully updated!", "Branch Updated", JOptionPane.INFORMATION_MESSAGE);
@@ -259,7 +259,7 @@ public class AdminView extends View {
 	public void updatePassword() {
 		if (!settingsInnerPanel.getPasswordText().isEmpty()) {
 			// Update admin user's password.
-			model.updatePassword(settingsInnerPanel.getPasswordText());
+			model.setPassword(settingsInnerPanel.getPasswordText());
 			
 			// Display success dialog.
 			JOptionPane.showMessageDialog(null, "Your password was successfully updated!", "Password Updated", JOptionPane.INFORMATION_MESSAGE);
@@ -280,8 +280,8 @@ public class AdminView extends View {
 			
 			// Delete the branch if user clicked "Yes".
 			if (choice == 0) {
-				int userId = model.getBranches().get(branchesList.getSelectedIndex()).getId();
-				Users.deleteUser(userId);
+				int branchId = model.getBranches().get(branchesList.getSelectedIndex()).getId();
+				model.deleteBranch(branchId);
 				branchesList.setListData(model.getBranchChoices());	
 				
 				

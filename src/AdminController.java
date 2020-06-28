@@ -1,9 +1,9 @@
 import java.awt.event.ActionEvent;
 
 public class AdminController extends Controller {
-	private AdminModel model;
+	private Administrator model;
 	
-	public AdminController(AdminModel model) {
+	public AdminController(Administrator model) {
 		this.model = model;
 	}
 	
