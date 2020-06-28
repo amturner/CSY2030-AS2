@@ -5,7 +5,7 @@ public abstract class Property implements Serializable {
 	protected String name;
 	protected String addrLine1, addrLine2, addrCity, addrCounty, addrPostcode;
 	protected int noOfRooms;
-	protected Double sellingPrice = 0.00, soldPrice = 0.00;
+	protected Double sellingPrice, soldPrice = 0.00;
 	
 	protected static int nextId = 1;
 	

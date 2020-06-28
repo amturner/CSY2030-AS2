@@ -11,10 +11,4 @@ public abstract class Controller implements ActionListener {
 	public void removeView(int index) {
 		views.remove(index);
 	}
-	
-	public void listViewIndexes() {
-		for (int i=0; i<views.size(); i++) {
-			System.out.println("Index: " + views.indexOf(views.get(i)) + ", Value: " + views.get(i));
-		}
-	}
 }

@@ -9,7 +9,8 @@ public class EditPropertyPanel extends JPanel {
 	// Panels
 	private JPanel editPropertyLeftPanel, editPropertyRightPanel;
 	// Inner Panels
-	private JPanel typePanel, typeInnerPanel, houseDetailsPanel, houseDetailsInnerPanel, houseDetailsInnerPanel2, flatDetailsPanel, flatDetailsInnerPanel, addressPanel;
+	private JPanel typePanel, typeInnerPanel, houseDetailsPanel, houseDetailsInnerPanel, houseDetailsInnerPanel2, flatDetailsPanel, flatDetailsInnerPanel;
+	private AddressPanel addressPanel;
 	// Labels
 	private JLabel propertyNameLabel, noOfRoomsLabel, typeLabel, houseDetailsLabel, noOfFloorsLabel, flatDetailsLabel, floorNoLabel, monthlyChargeLabel, sellingPriceLabel, soldPriceLabel, addressLabel;
 	// Fields
@@ -181,13 +182,12 @@ public class EditPropertyPanel extends JPanel {
 		setGarage(hasGarage);
 		sellingPriceField.setText(Double.toString(sellingPrice));
 		soldPriceField.setText(Double.toString(soldPrice));
-		((AddressPanel) addressPanel).setLine1Text(line1);
-		((AddressPanel) addressPanel).setLine2Text(line2);
-		((AddressPanel) addressPanel).setCityText(city);
-		((AddressPanel) addressPanel).setCountyText(county);
-		((AddressPanel) addressPanel).setPostcodeText(postcode);
+		addressPanel.setLine1Text(line1);
+		addressPanel.setLine2Text(line2);
+		addressPanel.setCityText(city);
+		addressPanel.setCountyText(county);
+		addressPanel.setPostcodeText(postcode);
 	}
-	
 	public void fillFields(String name, int noOfRooms, int floorNo, Double monthlyCharge, Double sellingPrice, Double soldPrice, String line1, String line2, String city, String county, String postcode) {
 		setSelectedType(FLAT);
 		nameField.setText(name);
@@ -196,11 +196,11 @@ public class EditPropertyPanel extends JPanel {
 		monthlyChargeField.setText(Double.toString(monthlyCharge));
 		sellingPriceField.setText(Double.toString(sellingPrice));
 		soldPriceField.setText(Double.toString(soldPrice));
-		((AddressPanel) addressPanel).setLine1Text(line1);
-		((AddressPanel) addressPanel).setLine2Text(line2);
-		((AddressPanel) addressPanel).setCityText(city);
-		((AddressPanel) addressPanel).setCountyText(county);
-		((AddressPanel) addressPanel).setPostcodeText(postcode);
+		addressPanel.setLine1Text(line1);
+		addressPanel.setLine2Text(line2);
+		addressPanel.setCityText(city);
+		addressPanel.setCountyText(county);
+		addressPanel.setPostcodeText(postcode);
 	}
 	
 	public void setGarden(boolean value) {
@@ -282,11 +282,11 @@ public class EditPropertyPanel extends JPanel {
 		monthlyChargeField.setText("");
 		sellingPriceField.setText("");
 		soldPriceField.setText("");
-		((AddressPanel) addressPanel).setLine1Text("");
-		((AddressPanel) addressPanel).setLine2Text("");
-		((AddressPanel) addressPanel).setCityText("");
-		((AddressPanel) addressPanel).setCountyText("");
-		((AddressPanel) addressPanel).setPostcodeText("");
+		addressPanel.setLine1Text("");
+		addressPanel.setLine2Text("");
+		addressPanel.setCityText("");
+		addressPanel.setCountyText("");
+		addressPanel.setPostcodeText("");
 		// Clear Radio Buttons
 		houseRadioButton.setSelected(false);
 		flatRadioButton.setSelected(false);
@@ -363,34 +363,27 @@ public class EditPropertyPanel extends JPanel {
 	
 	
 	public String getLine1Text() {
-		return ((AddressPanel) addressPanel).getLine1Text();
+		return addressPanel.getLine1Text();
 	}
 	
 	public String getLine2Text() {
-		return ((AddressPanel) addressPanel).getLine2Text();
+		return addressPanel.getLine2Text();
 	}
 	
 	public String getCityText() {
-		return ((AddressPanel) addressPanel).getCityText();
+		return addressPanel.getCityText();
 	}
 
 	public String getCountyText() {
-		return ((AddressPanel) addressPanel).getCountyText();
+		return addressPanel.getCountyText();
 	}
 	
 	public String getPostcodeText() {
-		return ((AddressPanel) addressPanel).getPostcodeText();
+		return addressPanel.getPostcodeText();
 	}
 
 	public boolean isRadioButtonSelected() {
 		if (houseRadioButton.isSelected() || flatRadioButton.isSelected())
-			return true;
-		else
-			return false;
-	}
-	
-	public boolean isCheckboxSelected() {
-		if (gardenCheckbox.isSelected() || garageCheckbox.isSelected())
 			return true;
 		else
 			return false;
@@ -409,6 +402,6 @@ public class EditPropertyPanel extends JPanel {
 	}
 	
 	public boolean isAddressFilled() {
-		return ((AddressPanel) addressPanel).isAddressFilled();
+		return addressPanel.isAddressFilled();
 	}
 }

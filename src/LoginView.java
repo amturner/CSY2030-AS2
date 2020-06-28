@@ -5,10 +5,11 @@ import javax.swing.*;
 
 public class LoginView extends View {
 	private JPanel labelPanel, formPanel;
-	private JLabel mainLabel, usernameLabel, passwordLabel, statusLabel;
+	private JLabel mainLabel, usernameLabel, passwordLabel;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
 	private JButton loginButton;
+	
 	private LoginController controller;
 	private LoginModel model;
 
@@ -40,8 +41,6 @@ public class LoginView extends View {
 		passwordField = new JPasswordField(20);
 		loginButton = new JButton("Log in");
 		loginButton.addActionListener(controller);
-		statusLabel = new JLabel("");
-		statusLabel.setForeground(Color.RED);
 		
 		// Add UI elements to panels.
 		labelPanel.add(mainLabel);

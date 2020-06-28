@@ -5,22 +5,11 @@ public abstract class User implements Serializable {
 	protected String username;
 	protected String password;
 	protected String userType;
-	protected String lastLoggedIn;
 	
 	protected static int nextId = 1;
 	
 	// User Type Constants
 	public static final String BRANCH = "Branch", ADMIN = "Administrator"; 
-	
-	/*
-	public User(int id, String username, String password, String userType) {
-		this.id = id;
-		this.username = username;
-		this.password = password;
-		this.userType = userType;
-		User.nextId = getNextId();
-	}
-	*/
 	
 	public User(String username, String password, String userType) {
 		id = User.nextId;
@@ -54,9 +43,5 @@ public abstract class User implements Serializable {
 	// Setter Methods
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	
-	public void setLastLoggedIn(String date) {
-		lastLoggedIn = date;
 	}
 }

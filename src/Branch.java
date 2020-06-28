@@ -50,7 +50,6 @@ public class Branch extends User {
 	public String getEmail() {
 		return email;
 	}
-
 	
 	public Property getProperty(int index) {
 		return properties.get(index);
