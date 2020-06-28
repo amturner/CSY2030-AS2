@@ -52,6 +52,7 @@ public class Administrator implements Serializable {
 		return AccountManager.getBranches();
 	}
 	
+	// Method for retrieving a list of branches for use with a JList.
 	public String[] getBranchChoices() {
 		String[] branchChoices = new String[getBranches().size()];
 		
@@ -72,10 +73,12 @@ public class Administrator implements Serializable {
 		this.password = password;
 	}
 	
+	// Method for adding a branch to the system.
 	public void addBranch(String username, String password, String name, String phone, String email) {
 		AccountManager.addBranch(username, password, name, phone, email);
 	}
 	
+	// Methods for updating an existing branch in the system.
 	public void updateBranch(int branchId, String name, String phone, String email) {
 		AccountManager.updateBranch(branchId, name, phone, email);
 	}
@@ -83,6 +86,7 @@ public class Administrator implements Serializable {
 		AccountManager.updateBranch(branchId, password, name, phone, email);
 	}
 
+	// Method for deleting a branch from the system.
 	public void deleteBranch(int branchId) {
 		AccountManager.deleteBranch(branchId);
 	}

@@ -77,11 +77,12 @@ public class Branch implements Serializable {
 	}
 	
 	// Methods for getting properties by an address.
-	public ArrayList<Property> getPropertiesByAddress(String line1) {
+	public ArrayList<Property> getPropertiesByAddress(String field) {
 		ArrayList<Property> filteredProperties = new ArrayList<Property>();
 		
 		for (Property property: properties) {
-			if (property.getAddressLine1().equals(line1)) {
+			if (property.getAddressLine1().equals(field) || property.getAddressLine2().equals(field) || property.getAddressCity().equals(field) || 
+				property.getAddressCounty().equals(field) || property.getAddressPostcode().equals(field)) {
 				filteredProperties.add(property);
 			}
 		}
@@ -205,6 +206,7 @@ public class Branch implements Serializable {
 		this.email = email;
 	}
 	
+	// Methods for adding a property to the branch.
 	public void addProperty(String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, int noOfFloors, boolean hasGarden, boolean hasGarage, Double sellingPrice) {
 		// Create new property instance with specified details.
 		properties.add(new House(name, addrLine1, addrLine2, addrCity, addrCounty, addrPostcode, noOfRooms, noOfFloors, hasGarden, hasGarage, sellingPrice));
@@ -218,7 +220,7 @@ public class Branch implements Serializable {
 		AccountManager.updateBranch(id, this);
 	}
 	
-	// Methods for updating a property in the current branch.
+	// Methods for updating a property in the branch.
 	public void updateProperty(int index, String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, int noOfFloors, boolean hasGarden, boolean hasGarage, Double sellingPrice) {
 		House updatedProperty = (House) properties.get(index);
 		// Update property attributes.
@@ -260,6 +262,7 @@ public class Branch implements Serializable {
 		AccountManager.updateBranch(id, this);
 	}
 	
+	// Method for deleting a property from the branch.
 	public void deleteProperty(int index) {
 		// Delete property at specified index from the branch.
 		properties.remove(index);

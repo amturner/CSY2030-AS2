@@ -468,6 +468,26 @@ public class BranchView extends View {
 			// Update view properties list with latest data.
 			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text());
 		}
+		else if (addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && addressSearchPanel.getCityText().isEmpty() &&
+				addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
+			// Update view properties list with latest data.
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine2Text());
+		}
+		else if (addressSearchPanel.getLine1Text().isEmpty() && addressSearchPanel.getLine2Text().isEmpty() && !addressSearchPanel.getCityText().isEmpty() &&
+				addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
+			// Update view properties list with latest data.
+			properties = model.getPropertiesByAddress(addressSearchPanel.getCityText());
+		}
+		else if (addressSearchPanel.getLine1Text().isEmpty() && addressSearchPanel.getLine2Text().isEmpty() && addressSearchPanel.getCityText().isEmpty() &&
+				!addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
+			// Update view properties list with latest data.
+			properties = model.getPropertiesByAddress(addressSearchPanel.getCountyText());
+		}
+		else if (addressSearchPanel.getLine1Text().isEmpty() && addressSearchPanel.getLine2Text().isEmpty() && addressSearchPanel.getCityText().isEmpty() &&
+				addressSearchPanel.getCountyText().isEmpty() && !addressSearchPanel.getPostcodeText().isEmpty()) {
+			// Update view properties list with latest data.
+			properties = model.getPropertiesByAddress(addressSearchPanel.getPostcodeText());
+		}
 		else if (!addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && addressSearchPanel.getCityText().isEmpty() &&
 				addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
 			// Update view properties list with latest data.

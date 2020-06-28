@@ -5,7 +5,7 @@ public class AccountManager {
 	private static ArrayList<Administrator> administrators = new ArrayList<Administrator>();
 	private static ArrayList<Branch> branches = new ArrayList<Branch>();
 	
-	// Filename Constant
+	// Filename Constants
 	private final static String ADMINS_FILE = "administrators.dat";
 	private final static String BRANCHES_FILE = "branches.dat";
 	// User Filter Constants
@@ -17,7 +17,6 @@ public class AccountManager {
 		loadAdministrators();
 		loadBranches();
 	}
-	
 	
 	// Method for loading administrators from a file.
 	public static void loadAdministrators() {
