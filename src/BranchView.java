@@ -83,7 +83,7 @@ public class BranchView extends View {
 		listPropertiesLeftPanel.setPreferredSize(new Dimension(frame.getWidth()/2, 335));
 		//////// List Properties Panel - Inner Left - Elements
 		propertyListingsLabel = new JLabel("Listings by branch '" + model.getBranchName() + "'");
-		propertiesList = new JList(model.getPropertyChoices(Branch.ALL_PROPERTIES, Branch.UNSOLD, model.getProperties()));
+		propertiesList = new JList(model.getPropertyChoices(Branch.ALL_PROPERTIES, Branch.UNSOLD, model.getProperties()).toArray());
 		propertiesList.setSelectionMode(JList.VERTICAL);
 		propertiesList.setLayoutOrientation(JList.VERTICAL);
 		propertiesList.setVisibleRowCount(-1);
@@ -452,7 +452,7 @@ public class BranchView extends View {
 	
 	// Method for listing properties as specified by the user's filter choices.
 	public void applyPropertiesFilter() {
-		propertiesList.setListData(model.getPropertyChoices(propertyTypeDropdown.getSelectedItem().toString(), sellingTypeDropdown.getSelectedItem().toString(), model.getProperties()));
+		propertiesList.setListData(model.getPropertyChoices(propertyTypeDropdown.getSelectedItem().toString(), sellingTypeDropdown.getSelectedItem().toString(), model.getProperties()).toArray());
 	}
 	
 	public void searchPropertyByAddress() {
@@ -515,7 +515,7 @@ public class BranchView extends View {
 			JOptionPane.showMessageDialog(null, "The address search combination you are using is currently unsupported.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
-		propertiesList.setListData(model.getPropertyChoices(propertyTypeDropdown.getSelectedItem().toString(), sellingTypeDropdown.getSelectedItem().toString(), properties));
+		propertiesList.setListData(model.getPropertyChoices(propertyTypeDropdown.getSelectedItem().toString(), sellingTypeDropdown.getSelectedItem().toString(), properties).toArray());
 	}
 	
 	// Method for switching cards on a panel with the CardLayout layout.

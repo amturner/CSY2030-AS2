@@ -137,17 +137,18 @@ public class Branch implements Serializable {
 	}
 	
 	// Method for retrieving property choices for use with a JList.
-	public String[] getPropertyChoices(String propertyType, String sellingType, ArrayList<Property> properties) {
-		String[] propertyChoices = new String[properties.size()];
+	public ArrayList<String> getPropertyChoices(String propertyType, String sellingType, ArrayList<Property> properties) {
+		//String[] propertyChoices = new String[properties.size()];
+		ArrayList<String> propertyChoices = new ArrayList<String>();
 		
 		if (propertyType.equals(ALL_PROPERTIES)) {
 			for (int i=0; i<properties.size(); i++) {
 				Property property = properties.get(i);
 				if (sellingType.equals(UNSOLD) && property.getSoldPrice() <= 0) {
-					propertyChoices[i] = "ID: " + property.getId() + " - Name: " + property.getName() + " - Type: " + property.getClass().getName() + " - Price: £" + property.getSellingPrice();
+					propertyChoices.add("ID: " + property.getId() + " - Name: " + property.getName() + " - Type: " + property.getClass().getName() + " - Price: £" + property.getSellingPrice());
 				}
 				else if (sellingType.equals(SOLD) && property.getSoldPrice() > 0) {
-					propertyChoices[i] = "ID: " + property.getId() + " - Name: " + property.getName() + " - Type: " + property.getClass().getName() + " - Price: £" + property.getSellingPrice();
+					propertyChoices.add("ID: " + property.getId() + " - Name: " + property.getName() + " - Type: " + property.getClass().getName() + " - Price: £" + property.getSellingPrice());
 				}
 			}
 		}
@@ -156,10 +157,10 @@ public class Branch implements Serializable {
 				Property property = properties.get(i);
 				if (property.getClass().getName().equals("House")) {
 					if (sellingType.equals(UNSOLD) && property.getSoldPrice() <= 0) {
-						propertyChoices[i] = "ID: " + property.getId() + " - Name: " + property.getName() + " - Type: "+ property.getClass().getName() + " - Price: £" + property.getSellingPrice();
+						propertyChoices.add("ID: " + property.getId() + " - Name: " + property.getName() + " - Type: " + property.getClass().getName() + " - Price: £" + property.getSellingPrice());
 					}
 					else if (sellingType.equals(SOLD) && property.getSoldPrice() > 0) {
-						propertyChoices[i] = "ID: " + property.getId() + " - Name: " + property.getName() + " - Type: " + property.getClass().getName() + " - Price: £" + property.getSellingPrice();
+						propertyChoices.add("ID: " + property.getId() + " - Name: " + property.getName() + " - Type: " + property.getClass().getName() + " - Price: £" + property.getSellingPrice());
 					}	
 				}
 			}
@@ -169,10 +170,10 @@ public class Branch implements Serializable {
 				Property property = properties.get(i);
 				if (property.getClass().getName().equals("Flat")) {
 					if (sellingType.equals(UNSOLD) && property.getSoldPrice() <= 0) {
-						propertyChoices[i] = "ID: " + property.getId() + " - Name: " + property.getName() + " - Type: " + property.getClass().getName() + " - Price: £" + property.getSellingPrice();
+						propertyChoices.add("ID: " + property.getId() + " - Name: " + property.getName() + " - Type: " + property.getClass().getName() + " - Price: £" + property.getSellingPrice());
 					}
 					else if (sellingType.equals(SOLD) && property.getSoldPrice() > 0) {
-						propertyChoices[i] = "ID: " + property.getId() + " - Name: " + property.getName() + " - Type: " + property.getClass().getName() + " - Price: £" + property.getSellingPrice();
+						propertyChoices.add("ID: " + property.getId() + " - Name: " + property.getName() + " - Type: " + property.getClass().getName() + " - Price: £" + property.getSellingPrice());
 					}
 				}
 			}
