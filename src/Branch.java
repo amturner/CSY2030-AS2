@@ -138,10 +138,9 @@ public class Branch implements Serializable {
 	
 	// Method for retrieving property choices for use with a JList.
 	public String[] getPropertyChoices(String propertyType, String sellingType, ArrayList<Property> properties) {
-		String[] propertyChoices = null;
+		String[] propertyChoices = new String[properties.size()];
 		
 		if (propertyType.equals(ALL_PROPERTIES)) {
-			propertyChoices = new String[properties.size()];
 			for (int i=0; i<properties.size(); i++) {
 				Property property = properties.get(i);
 				if (sellingType.equals(UNSOLD) && property.getSoldPrice() <= 0) {
@@ -153,7 +152,6 @@ public class Branch implements Serializable {
 			}
 		}
 		else if (propertyType.equals(HOUSES)) {
-			propertyChoices = new String[properties.size()];
 			for (int i=0; i<properties.size(); i++) {
 				Property property = properties.get(i);
 				if (property.getClass().getName().equals("House")) {
@@ -167,7 +165,6 @@ public class Branch implements Serializable {
 			}
 		}
 		else if (propertyType.equals(FLATS)) {
-			propertyChoices = new String[properties.size()];
 			for (int i=0; i<properties.size(); i++) {
 				Property property = properties.get(i);
 				if (property.getClass().getName().equals("Flat")) {
@@ -179,7 +176,7 @@ public class Branch implements Serializable {
 					}
 				}
 			}
-		}
+		}	
 		
 		return propertyChoices;
 	}

@@ -510,6 +510,10 @@ public class BranchView extends View {
 			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine1Text(), addressSearchPanel.getCityText(),
 														addressSearchPanel.getCountyText(), addressSearchPanel.getPostcodeText());
 		}
+		else {
+			properties = model.getProperties();
+			JOptionPane.showMessageDialog(null, "The address search combination you are using is not currently supported.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 		
 		propertiesList.setListData(model.getPropertyChoices(propertyTypeDropdown.getSelectedItem().toString(), sellingTypeDropdown.getSelectedItem().toString(), properties));
 	}
