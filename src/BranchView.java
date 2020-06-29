@@ -512,7 +512,7 @@ public class BranchView extends View {
 		}
 		else {
 			properties = model.getProperties();
-			JOptionPane.showMessageDialog(null, "The address search combination you are using is not currently supported.", "Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "The address search combination you are using is currently unsupported.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
 		propertiesList.setListData(model.getPropertyChoices(propertyTypeDropdown.getSelectedItem().toString(), sellingTypeDropdown.getSelectedItem().toString(), properties));
