@@ -10,7 +10,7 @@ public class Branch implements Serializable {
 	private String email;
 	private ArrayList<Property> properties = new ArrayList<Property>();
 	
-	public static int NEXT_ID = 1;
+	private static int nextId = 1;
 	
 	// Type Filter Constants
 	public static final String ALL_PROPERTIES = "All", HOUSES = "Houses", FLATS = "Flats", UNSOLD = "Unsold", SOLD = "Sold"; 
@@ -30,8 +30,8 @@ public class Branch implements Serializable {
 		return id;
 	}
 	
-	public int getNextId() {
-		return Branch.NEXT_ID;
+	public static int getNextId() {
+		return nextId;
 	}
 	
 	public String getUsername() {
@@ -42,7 +42,7 @@ public class Branch implements Serializable {
 		return password;
 	}
 	
-	public Boolean validateLogin(String username, char[] password) {
+	public boolean validateLogin(String username, char[] password) {
 		boolean valid = false;
 		
 		if (username.equals(this.username) && password.toString().equals(this.password)) {
@@ -138,7 +138,6 @@ public class Branch implements Serializable {
 	
 	// Method for retrieving property choices for use with a JList.
 	public ArrayList<String> getPropertyChoices(String propertyType, String sellingType, ArrayList<Property> properties) {
-		//String[] propertyChoices = new String[properties.size()];
 		ArrayList<String> propertyChoices = new ArrayList<String>();
 		
 		if (propertyType.equals(ALL_PROPERTIES)) {
@@ -183,8 +182,8 @@ public class Branch implements Serializable {
 	}
 	
 	// Setter Methods
-	public void setNextId(int id) {
-		Branch.NEXT_ID = id;
+	public static void setNextId(int id) {
+		nextId = id;
 	}
 	
 	public void setPassword(String password) {
@@ -205,25 +204,25 @@ public class Branch implements Serializable {
 	}
 	
 	// Methods for adding a property to the branch.
-	public void addProperty(String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, int noOfFloors, boolean hasGarden, boolean hasGarage, Double sellingPrice) {
+	public void addProperty(String name, String line1, String line2, String city, String county, String postcode, int noOfRooms, int noOfFloors, boolean hasGarden, boolean hasGarage, Double sellingPrice) {
 		// Create new property instance with specified details.
-		properties.add(new House(name, addrLine1, addrLine2, addrCity, addrCounty, addrPostcode, noOfRooms, noOfFloors, hasGarden, hasGarage, sellingPrice));
+		properties.add(new House(name, line1, line2, city, county, postcode, noOfRooms, noOfFloors, hasGarden, hasGarage, sellingPrice));
 		// Update branch.
 		AccountManager.updateBranch(id, this);
 	}
-	public void addProperty(String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, int floorNo, Double sellingPrice, Double monthlyCharge) {
+	public void addProperty(String name, String line1, String line2, String city, String county, String postcode, int noOfRooms, int floorNo, Double sellingPrice, Double monthlyCharge) {
 		// Create new property instance with specified details.
-		properties.add(new Flat(name, addrLine1, addrLine2, addrCity, addrCounty, addrPostcode, noOfRooms, floorNo, sellingPrice, monthlyCharge));
+		properties.add(new Flat(name, line1, line2, city, county, postcode, noOfRooms, floorNo, sellingPrice, monthlyCharge));
 		// Update branch.
 		AccountManager.updateBranch(id, this);
 	}
 	
 	// Methods for updating a property in the branch.
-	public void updateProperty(int index, String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, int noOfFloors, boolean hasGarden, boolean hasGarage, Double sellingPrice) {
+	public void updateProperty(int index, String name, String line1, String line2, String city, String county, String postcode, int noOfRooms, int noOfFloors, boolean hasGarden, boolean hasGarage, Double sellingPrice) {
 		House updatedProperty = (House) properties.get(index);
 		// Update property attributes.
 		updatedProperty.setName(name);
-		updatedProperty.setAddress(addrLine1, addrLine2, addrCity, addrCounty, addrPostcode);
+		updatedProperty.setAddress(line1, line2, city, county, postcode);
 		updatedProperty.setNoOfRooms(noOfRooms);
 		updatedProperty.setNoOfFloors(noOfFloors);
 		updatedProperty.setGarden(hasGarden);
@@ -234,11 +233,11 @@ public class Branch implements Serializable {
 		// Update branch.
 		AccountManager.updateBranch(id, this);
 	}
-	public void updateProperty(int index, String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, int floorNo, Double sellingPrice, Double monthlyCharge) {
+	public void updateProperty(int index, String name, String line1, String line2, String city, String county, String postcode, int noOfRooms, int floorNo, Double sellingPrice, Double monthlyCharge) {
 		Flat updatedProperty = (Flat) properties.get(index);
 		// Update property attributes.
 		updatedProperty.setName(name);
-		updatedProperty.setAddress(addrLine1, addrLine2, addrCity, addrCounty, addrPostcode);
+		updatedProperty.setAddress(line1, line2, city, county, postcode);
 		updatedProperty.setNoOfRooms(noOfRooms);
 		updatedProperty.setFloorNo(floorNo);
 		updatedProperty.setSellingPrice(sellingPrice);

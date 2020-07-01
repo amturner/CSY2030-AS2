@@ -6,7 +6,7 @@ public class Administrator implements Serializable {
 	private String username;
 	private String password;
 	
-	public static int NEXT_ID = 1;
+	private static int nextId = 1;
 	
 	public Administrator(String username, String password) {
 		id = getNextId();
@@ -20,8 +20,8 @@ public class Administrator implements Serializable {
 		return id;
 	}
 	
-	public int getNextId() {
-		return Administrator.NEXT_ID;
+	public static int getNextId() {
+		return nextId;
 	}
 	
 	public String getUsername() {
@@ -32,7 +32,7 @@ public class Administrator implements Serializable {
 		return password;
 	}
 	
-	public Boolean validateLogin(String username, char[] password) {
+	public boolean validateLogin(String username, char[] password) {
 		boolean valid = false;
 		
 		if (username.equals(this.username) && password.toString().equals(this.password)) {
@@ -53,20 +53,20 @@ public class Administrator implements Serializable {
 	}
 	
 	// Method for retrieving a list of branches for use with a JList.
-	public String[] getBranchChoices() {
-		String[] branchChoices = new String[getBranches().size()];
+	public ArrayList<String> getBranchChoices() {
+		ArrayList<String> branchChoices = new ArrayList<String>();
 		
 		for (int i=0; i<getBranches().size(); i++) {
 			Branch branch = getBranch(i);
-			branchChoices[i] = "ID: " + branch.getId() + " - Name: " + branch.getBranchName() + " - Phone: " + branch.getPhone() + " - Email: " + branch.getEmail() + " - Properties: " + branch.getPropertiesCount();
+			branchChoices.add("ID: " + branch.getId() + " - Name: " + branch.getBranchName() + " - Phone: " + branch.getPhone() + " - Email: " + branch.getEmail() + " - Properties: " + branch.getPropertiesCount());
 		}
 		
 		return branchChoices;
 	}
 	
 	// Setter Methods
-	public void setNextId(int id) {
-		Administrator.NEXT_ID = id;
+	public static void setNextId(int id) {
+		nextId = id;
 	}
 	
 	public void setPassword(String password) {

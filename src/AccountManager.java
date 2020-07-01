@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.regex.*;
 import java.util.ArrayList;
 
 public class AccountManager {
@@ -30,8 +31,8 @@ public class AccountManager {
 			while ((obj=(Administrator)ois.readObject()) != null) {
 				// Add administrator instance to ArrayList.
 				administrators.add(obj);
-				// Set Administrator.NEXT_ID to the next expected administrator ID.
-				Administrator.NEXT_ID = obj.getNextId();
+				// Set Administrator.nextId to the next expected administrator ID.
+				Administrator.setNextId(obj.getId() + 1);
 			}
 			
 			ois.close();
@@ -56,7 +57,7 @@ public class AccountManager {
 		// Create new administrators if no administrators exist.
 		if (administrators.size() == 0) {
 			System.out.println("No administrators currently exist. Adding new administrator account...");
-			addAdministrator("admin", "password");
+			addAdministrator("admin", "changeme");
 		}	
 	}
 	
@@ -73,10 +74,10 @@ public class AccountManager {
 				// Add user instance to ArrayList.
 				branches.add(obj);
 				// Set User.nextId to the next expected user ID.
-				Branch.NEXT_ID = obj.getNextId();
+				Branch.setNextId(obj.getId() + 1);
 				if (((Branch) obj).getProperties().size() != 0) {
 					// Set Property.nextId to the next expected property ID.
-					Property.NEXT_ID = ((Branch) obj).getProperties().get(((Branch) obj).getProperties().size()-1).getNextId();
+					Property.setNextId(((Branch) obj).getProperties().get(((Branch) obj).getProperties().size()-1).getId() + 1);
 				}
 			}
 			
@@ -159,6 +160,25 @@ public class AccountManager {
 		}	
 		
 		return emailFound;
+	}
+	
+	// Method for checking whether a phone number is valid.
+	public static boolean isPhoneValid(String phone) {
+		// java.util.regex Pattern class: https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
+		Pattern pattern = Pattern.compile("^[0-9]{11}$");
+		Matcher matcher = pattern.matcher(phone);
+		
+		return matcher.matches();
+	}
+	
+	// Method for checking whether an email address is valid.
+	public static boolean isEmailValid(String email) {
+		// java.util.regex Pattern class: https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
+		// RegEx Pattern From: https://regexlib.com/REDetails.aspx?regexp_id=26
+		Pattern pattern = Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
+		Matcher matcher = pattern.matcher(email);
+		
+		return matcher.matches();
 	}
 	
 	// Setter Methods

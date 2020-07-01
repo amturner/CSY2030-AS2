@@ -7,7 +7,7 @@ public abstract class Property implements Serializable {
 	protected int noOfRooms;
 	protected Double sellingPrice, soldPrice = 0.00;
 	
-	public static int NEXT_ID = 1;
+	protected static int nextId = 1;
 	
 	public Property(String name, String addrLine1, String addrLine2, String addrCity, String addrCounty, String addrPostcode, int noOfRooms, Double sellingPrice) {
 		id = getNextId();
@@ -27,8 +27,8 @@ public abstract class Property implements Serializable {
 		return id;
 	}
 	
-	public int getNextId() {
-		return Property.NEXT_ID;
+	public static int getNextId() {
+		return nextId;
 	}
 	
 	public String getName() {
@@ -68,8 +68,8 @@ public abstract class Property implements Serializable {
 	}
 	
 	// Setter Methods
-	public void setNextId(int id) {
-		Property.NEXT_ID = id;
+	public static void setNextId(int id) {
+		nextId = id;
 	}
 	
 	public void setName(String name) {

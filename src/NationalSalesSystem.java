@@ -5,7 +5,7 @@ public class NationalSalesSystem {
 		
 		// Load administrators and branches into the system.
 		AccountManager.loadAll();
-		
+
 		// Set up and display LoginView.
 		LoginModel model = new LoginModel();
 		LoginController controller = new LoginController(model);

@@ -75,7 +75,7 @@ public class AdminView extends View {
 		branchesLabelPanel.setPreferredSize(new Dimension(475, 25));
 		branchesLabel = new JLabel("Branches");
 		branchesLabelPanel.add(branchesLabel);
-		branchesList = new JList(model.getBranchChoices());
+		branchesList = new JList(model.getBranchChoices().toArray());
 		branchesList.setSelectionMode(JList.VERTICAL);
 		branchesList.setLayoutOrientation(JList.VERTICAL);
 		branchesList.setVisibleRowCount(-1);
@@ -148,29 +148,41 @@ public class AdminView extends View {
 					if (!addBranchPanel.getPhoneText().isEmpty()) {
 						if (!addBranchPanel.getEmailText().isEmpty()) {
 							if (!AccountManager.doesUserExist(addBranchPanel.getUsernameText())) {
-								if (!AccountManager.isPhoneUsed(addBranchPanel.getPhoneText())) {
-									if (!AccountManager.isEmailUsed(addBranchPanel.getEmailText())) {
-										// Add new branch to system.
-										AccountManager.addBranch(addBranchPanel.getUsernameText(), addBranchPanel.getPasswordText(), addBranchPanel.getNameText(), addBranchPanel.getPhoneText(), addBranchPanel.getEmailText());
-										
-										// Display success dialog.
-										JOptionPane.showMessageDialog(null, "The branch was successfully added!", "Branch Added", JOptionPane.INFORMATION_MESSAGE);
-										
-										// Clear form fields.
-										addBranchPanel.clearFields();
-										
-										// Update view branches list with latest data.
-										branchesList.setListData(model.getBranchChoices());		
+								if (AccountManager.isPhoneValid(addBranchPanel.getPhoneText())) {
+									if (!AccountManager.isPhoneUsed(addBranchPanel.getPhoneText())) {
+										if (AccountManager.isEmailValid(addBranchPanel.getEmailText())) {
+											if (!AccountManager.isEmailUsed(addBranchPanel.getEmailText())) {
+												// Add new branch to system.
+												AccountManager.addBranch(addBranchPanel.getUsernameText(), addBranchPanel.getPasswordText(), addBranchPanel.getNameText(), addBranchPanel.getPhoneText(), addBranchPanel.getEmailText());
+												
+												// Display success dialog.
+												JOptionPane.showMessageDialog(null, "The branch was successfully added!", "Branch Added", JOptionPane.INFORMATION_MESSAGE);
+												
+												// Clear form fields.
+												addBranchPanel.clearFields();
+												
+												// Update view branches list with latest data.
+												branchesList.setListData(model.getBranchChoices().toArray());		
+											}
+											else {
+												// Display error dialog.
+												JOptionPane.showMessageDialog(null, "The email address provided is already in use.", "Error", JOptionPane.ERROR_MESSAGE);
+											}		
+										}
+										else {
+											// Display error dialog.
+											JOptionPane.showMessageDialog(null, "The email address provided is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+										}
 									}
 									else {
 										// Display error dialog.
-										JOptionPane.showMessageDialog(null, "The email address provided is already in use.", "Error", JOptionPane.ERROR_MESSAGE);
-									}	
+										JOptionPane.showMessageDialog(null, "The phone number provided is already in use.", "Error", JOptionPane.ERROR_MESSAGE);
+									}		
 								}
 								else {
 									// Display error dialog.
-									JOptionPane.showMessageDialog(null, "The phone number provided is already in use.", "Error", JOptionPane.ERROR_MESSAGE);
-								}	
+									JOptionPane.showMessageDialog(null, "The phone number provided is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+								}
 							}
 							else {
 								// Display error dialog.
@@ -210,35 +222,47 @@ public class AdminView extends View {
 		if (!editBranchFormPanel.getNameText().isEmpty()) {
 			if (!editBranchFormPanel.getPhoneText().isEmpty()) {
 				if (!editBranchFormPanel.getEmailText().isEmpty()) {
-					if (editBranchFormPanel.getPhoneText().equals(branch.getPhone()) || !AccountManager.isPhoneUsed(editBranchFormPanel.getPhoneText())) {
-						if (editBranchFormPanel.getEmailText().equals(branch.getEmail()) || !AccountManager.isEmailUsed(editBranchFormPanel.getEmailText())) {
-							// Add new branch to system.
-							if (!editBranchFormPanel.getPasswordText().isEmpty())
-								AccountManager.updateBranch(branch.getId(), editBranchFormPanel.getPasswordText(), editBranchFormPanel.getNameText(), editBranchFormPanel.getPhoneText(), editBranchFormPanel.getEmailText());
-							else
-								AccountManager.updateBranch(branch.getId(), editBranchFormPanel.getNameText(), editBranchFormPanel.getPhoneText(), editBranchFormPanel.getEmailText());
-							
-							// Display success dialog.
-							JOptionPane.showMessageDialog(null, "The branch was successfully updated!", "Branch Updated", JOptionPane.INFORMATION_MESSAGE);
-							
-							// Clear form fields.
-							editBranchFormPanel.clearFields();
-							
-							// Update view branches list with latest data.
-							branchesList.setListData(model.getBranchChoices());		
-							
-							// Display the list of current branches.
-							switchCards(viewBranchesPanel, LIST_BRANCHES_CARD);
+					if (AccountManager.isPhoneValid(editBranchFormPanel.getPhoneText())) {
+						if (editBranchFormPanel.getPhoneText().equals(branch.getPhone()) || !AccountManager.isPhoneUsed(editBranchFormPanel.getPhoneText())) {
+							if (AccountManager.isEmailValid(editBranchFormPanel.getEmailText())) {
+								if (editBranchFormPanel.getEmailText().equals(branch.getEmail()) || !AccountManager.isEmailUsed(editBranchFormPanel.getEmailText())) {
+									// Add new branch to system.
+									if (!editBranchFormPanel.getPasswordText().isEmpty())
+										AccountManager.updateBranch(branch.getId(), editBranchFormPanel.getPasswordText(), editBranchFormPanel.getNameText(), editBranchFormPanel.getPhoneText(), editBranchFormPanel.getEmailText());
+									else
+										AccountManager.updateBranch(branch.getId(), editBranchFormPanel.getNameText(), editBranchFormPanel.getPhoneText(), editBranchFormPanel.getEmailText());
+									
+									// Display success dialog.
+									JOptionPane.showMessageDialog(null, "The branch was successfully updated!", "Branch Updated", JOptionPane.INFORMATION_MESSAGE);
+									
+									// Clear form fields.
+									editBranchFormPanel.clearFields();
+									
+									// Update view branches list with latest data.
+									branchesList.setListData(model.getBranchChoices().toArray());		
+									
+									// Display the list of current branches.
+									switchCards(viewBranchesPanel, LIST_BRANCHES_CARD);
+								}
+								else {
+									// Display error dialog.
+									JOptionPane.showMessageDialog(null, "The email address provided is already in use.", "Error", JOptionPane.ERROR_MESSAGE);
+								}		
+							}
+							else {
+								// Display error dialog.
+								JOptionPane.showMessageDialog(null, "The email address provided is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+							}
 						}
 						else {
 							// Display error dialog.
-							JOptionPane.showMessageDialog(null, "The email address provided is already in use.", "Error", JOptionPane.ERROR_MESSAGE);
-						}	
+							JOptionPane.showMessageDialog(null, "The phone number provided is already in use.", "Error", JOptionPane.ERROR_MESSAGE);
+						}		
 					}
 					else {
 						// Display error dialog.
-						JOptionPane.showMessageDialog(null, "The phone number provided is already in use.", "Error", JOptionPane.ERROR_MESSAGE);
-					}	
+						JOptionPane.showMessageDialog(null, "The phone number provided is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 				else {
 					// Display error dialog.
@@ -276,13 +300,13 @@ public class AdminView extends View {
 	public void deleteBranch() {
 		if (!branchesList.isSelectionEmpty()) {
 			// Display yes no dialog.
-			int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected branch?\n\nThis will result in the lost of any associated properties.", "Delete Branch", JOptionPane.YES_NO_OPTION);
+			int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected branch?\n\nThis will result in the loss of any associated properties.", "Delete Branch", JOptionPane.YES_NO_OPTION);
 			
 			// Delete the branch if user clicked "Yes".
 			if (choice == 0) {
 				int branchId = model.getBranches().get(branchesList.getSelectedIndex()).getId();
 				model.deleteBranch(branchId);
-				branchesList.setListData(model.getBranchChoices());	
+				branchesList.setListData(model.getBranchChoices().toArray());	
 				
 				
 				// Display success dialog.
