@@ -538,22 +538,39 @@ public class BranchView extends View {
 				CardLayout cardLayout = (CardLayout) (parent.getLayout());
 				cardLayout.show(parent, name);
 				
-				Property property = model.getProperty(propertiesList.getSelectedIndex());
+				// Split string of selected property listing.
+				String str = propertiesList.getSelectedValue().toString();
+				String[] strSplit = str.split("-");
+				String[] subStrSplit = strSplit[0].split(" ");
 				
-				if (property.getClass().getName().equals(EditPropertyPanel.HOUSE)) {
-					House house = (House) property;
+				// Retrieve the selected property's ID from subStrSplit[1].
+				int selectedPropertyId = Integer.parseInt(subStrSplit[1]);
+				
+				//Property property = model.getProperty(propertiesList.getSelectedIndex());
+				
+				// Loop through all properties until property with matching ID is found.
+				Property selectedProperty = null;
+				for (Property property: model.getProperties()) {
+					if (selectedPropertyId == property.getId()) {
+						selectedProperty = property;
+						break;
+					}
+				}
+				
+				if (selectedProperty.getClass().getName().equals(EditPropertyPanel.HOUSE)) {
+					House house = (House) selectedProperty;
 					editPropertyInnerPanel.fillFields(house.getName(), house.getNoOfRooms(), house.getNoOfFloors(), house.propertyHasGarden(),
 							house.propertyHasGarage(), house.getSellingPrice(), house.getSoldPrice(), house.getAddressLine1(), 
 							house.getAddressLine2(), house.getAddressCity(), house.getAddressCounty(), house.getAddressPostcode());
 				}
-				else if (property.getClass().getName().equals(EditPropertyPanel.FLAT)) {
-					Flat flat = (Flat) property;
+				else if (selectedProperty.getClass().getName().equals(EditPropertyPanel.FLAT)) {
+					Flat flat = (Flat) selectedProperty;
 					editPropertyInnerPanel.fillFields(flat.getName(), flat.getNoOfRooms(), flat.getFloorNo(), flat.getMonthlyCharge(),
 							flat.getSellingPrice(), flat.getSoldPrice(), flat.getAddressLine1(), flat.getAddressLine2(), 
 							flat.getAddressCity(), flat.getAddressCounty(), flat.getAddressPostcode());
 				}
 				
-				if (property.getSoldPrice() > 0.0)
+				if (selectedProperty.getSoldPrice() > 0.0)
 					editPropertyInnerPanel.propertySold(true);
 				else
 					editPropertyInnerPanel.propertySold(false);
