@@ -515,8 +515,6 @@ public class BranchView extends View {
 			JOptionPane.showMessageDialog(null, "The address search combination you are using is currently unsupported.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
-		System.out.println(Arrays.toString(properties.toArray()));
-		
 		propertiesList.setListData(model.getPropertyChoices(propertyTypeDropdown.getSelectedItem().toString(), sellingTypeDropdown.getSelectedItem().toString(), properties).toArray());
 	}
 	
