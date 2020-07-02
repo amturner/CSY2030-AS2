@@ -491,29 +491,31 @@ public class BranchView extends View {
 		else if (!addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && addressSearchPanel.getCityText().isEmpty() &&
 				addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
 			// Update view properties list with latest data.
-			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine1Text());
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine2Text());
 		}
 		else if (!addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && !addressSearchPanel.getCityText().isEmpty() &&
 				addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
 			// Update view properties list with latest data.
-			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine1Text(), addressSearchPanel.getCityText());
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine2Text(), addressSearchPanel.getCityText());
 		}
 		else if (!addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && !addressSearchPanel.getCityText().isEmpty() &&
 				!addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
 			// Update view properties list with latest data.
-			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine1Text(), addressSearchPanel.getCityText(),
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine2Text(), addressSearchPanel.getCityText(),
 														addressSearchPanel.getCountyText());
 		}
 		else if (!addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && !addressSearchPanel.getCityText().isEmpty() &&
 				!addressSearchPanel.getCountyText().isEmpty() && !addressSearchPanel.getPostcodeText().isEmpty()) {
 			// Update view properties list with latest data.
-			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine1Text(), addressSearchPanel.getCityText(),
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine2Text(), addressSearchPanel.getCityText(),
 														addressSearchPanel.getCountyText(), addressSearchPanel.getPostcodeText());
 		}
 		else {
 			properties = model.getProperties();
 			JOptionPane.showMessageDialog(null, "The address search combination you are using is currently unsupported.", "Error", JOptionPane.ERROR_MESSAGE);
 		}
+		
+		System.out.println(Arrays.toString(properties.toArray()));
 		
 		propertiesList.setListData(model.getPropertyChoices(propertyTypeDropdown.getSelectedItem().toString(), sellingTypeDropdown.getSelectedItem().toString(), properties).toArray());
 	}
