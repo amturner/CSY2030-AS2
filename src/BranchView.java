@@ -380,28 +380,37 @@ public class BranchView extends View {
 	
 	public void sellProperty() {
 		if (!propertiesList.isSelectionEmpty()) {
-			try {
-				// Ask the user for the price that the property has sold for.
-				Double soldPrice = Double.parseDouble(JOptionPane.showInputDialog(null, "How much did this property sell for?", "Sell Property", JOptionPane.QUESTION_MESSAGE));
-				
-				if (soldPrice >= model.getProperty(propertiesList.getSelectedIndex()).getSellingPrice()) {
-					// Sell property.
-					model.sellProperty(propertiesList.getSelectedIndex(), soldPrice);
+			if (!(model.getProperty(propertiesList.getSelectedIndex()).getSoldPrice() > 0)) {
+				try {
+					// Ask the user for the price that the property has sold for.
+					Double soldPrice = Double.parseDouble(JOptionPane.showInputDialog(null, "How much did this property sell for?", "Sell Property", JOptionPane.QUESTION_MESSAGE));
 					
-					// Update view branches list with latest data.
-					applyPropertiesFilter();
-					
-					// Display success dialog.
-					JOptionPane.showMessageDialog(null, "The selected property was successfully sold for £" + soldPrice + "!", "Property Sold", JOptionPane.INFORMATION_MESSAGE);
+					if (soldPrice >= model.getProperty(propertiesList.getSelectedIndex()).getSellingPrice()) {
+						// Sell property.
+						model.sellProperty(propertiesList.getSelectedIndex(), soldPrice);
+						
+						// Update view branches list with latest data.
+						applyPropertiesFilter();
+						
+						// Display success dialog.
+						JOptionPane.showMessageDialog(null, "The selected property was successfully sold for £" + soldPrice + "!", "Property Sold", JOptionPane.INFORMATION_MESSAGE);
+					}
+					else {
+						// Display error dialog.
+						JOptionPane.showMessageDialog(null, "The selcted property cannot be sold for less than the current selling price.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 				}
-				else {
+				catch (NumberFormatException e) {
 					// Display error dialog.
-					JOptionPane.showMessageDialog(null, "The selcted property cannot be sold for less than the current selling price.", "Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, "The price you have entered is not a number.\n\nPlease try again!", "Error", JOptionPane.ERROR_MESSAGE);
+				}	
+				catch (NullPointerException e) {
+					
 				}
 			}
-			catch (NumberFormatException e) {
+			else {
 				// Display error dialog.
-				JOptionPane.showMessageDialog(null, "The price you have entered is not a number.\n\nPlease try again!", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "The selected property has already been sold for £" + model.getProperty(propertiesList.getSelectedIndex()).getSoldPrice() +  ".", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		else {
