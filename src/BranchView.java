@@ -546,8 +546,6 @@ public class BranchView extends View {
 				// Retrieve the selected property's ID from subStrSplit[1].
 				int selectedPropertyId = Integer.parseInt(subStrSplit[1]);
 				
-				//Property property = model.getProperty(propertiesList.getSelectedIndex());
-				
 				// Loop through all properties until property with matching ID is found.
 				Property selectedProperty = null;
 				for (Property property: model.getProperties()) {
