@@ -389,22 +389,20 @@ public class BranchView extends View {
 			int selectedPropertyId = Integer.parseInt(subStrSplit[1]);
 			
 			// Loop through all properties until property with matching ID is found.
-			Property selectedProperty = null;
 			int selectedPropertyIndex = 0;
 			for (Property property: model.getProperties()) {
 				if (selectedPropertyId == property.getId()) {
-					selectedProperty = property;
 					selectedPropertyIndex = model.getProperties().indexOf(property);
 					break;
 				}
 			}
 			
-			if (!(selectedProperty.getSoldPrice() > 0)) {
+			if (!(model.getProperty(selectedPropertyIndex).getSoldPrice() > 0)) {
 				try {
 					// Ask the user for the price that the property has sold for.
 					Double soldPrice = Double.parseDouble(JOptionPane.showInputDialog(null, "How much did this property sell for?", "Sell Property", JOptionPane.QUESTION_MESSAGE));
 					
-					if (soldPrice >= selectedProperty.getSellingPrice()) {
+					if (soldPrice >= model.getProperty(selectedPropertyIndex).getSellingPrice()) {
 						// Sell property.
 						model.sellProperty(selectedPropertyIndex, soldPrice);
 						
@@ -429,7 +427,7 @@ public class BranchView extends View {
 			}
 			else {
 				// Display error dialog.
-				JOptionPane.showMessageDialog(null, "The selected property has already been sold for £" + selectedProperty.getSoldPrice() +  ".", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "The selected property has already been sold for £" + model.getProperty(selectedPropertyIndex).getSoldPrice() +  ".", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		else {
@@ -440,13 +438,30 @@ public class BranchView extends View {
 	
 	public void deleteProperty() {
 		if (!propertiesList.isSelectionEmpty()) {
+			// Split string of selected property listing.
+			String str = propertiesList.getSelectedValue().toString();
+			String[] strSplit = str.split("-");
+			String[] subStrSplit = strSplit[0].split(" ");
+			
+			// Retrieve the selected property's ID from subStrSplit[1].
+			int selectedPropertyId = Integer.parseInt(subStrSplit[1]);
+			
+			// Loop through all properties until property with matching ID is found.
+			int selectedPropertyIndex = 0;
+			for (Property property: model.getProperties()) {
+				if (selectedPropertyId == property.getId()) {
+					selectedPropertyIndex = model.getProperties().indexOf(property);
+					break;
+				}
+			}
+			
 			// Display yes no dialog.
 			int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected property?", "Delete Property", JOptionPane.YES_NO_OPTION);
 			
 			// Delete the branch if user clicked "Yes".
 			if (choice == 0) {
 				// Delete property from branch.
-				model.deleteProperty(propertiesList.getSelectedIndex());
+				model.deleteProperty(selectedPropertyIndex);
 
 				// Update view branches list with latest data.
 				applyPropertiesFilter();		
