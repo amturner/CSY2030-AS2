@@ -9,15 +9,6 @@ public class Flat extends Property {
 		this.monthlyCharge = monthlyCharge;
 	}
 	
-	// Setter Methods
-	public void setFloorNo(int floorNo) {
-		this.floorNo = floorNo;
-	}
-	
-	public void setMonthlyCharge(Double monthlyCharge) {
-		this.monthlyCharge = monthlyCharge;
-	}
-	
 	// Getter Methods
 	public int getFloorNo() {
 		return floorNo;
@@ -25,5 +16,14 @@ public class Flat extends Property {
 	
 	public Double getMonthlyCharge() {
 		return monthlyCharge;
+	}
+	
+	// Setter Methods
+	public void setFloorNo(int floorNo) {
+		this.floorNo = floorNo;
+	}
+	
+	public void setMonthlyCharge(Double monthlyCharge) {
+		this.monthlyCharge = monthlyCharge;
 	}
 }

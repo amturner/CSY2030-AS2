@@ -56,7 +56,7 @@ public class LoginView extends View {
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				Users.saveUsers();
+				AccountManager.saveAll();
 			}
 		});
 		
@@ -69,7 +69,7 @@ public class LoginView extends View {
 	public void login() {
 		if (!usernameField.getText().isEmpty()) {
 			if (passwordField.getPassword().length != 0) {
-				if (model.doesUserExist(usernameField.getText())) {
+				if (AccountManager.doesUserExist(usernameField.getText())) {
 					if (model.validateLogin(usernameField.getText(), passwordField.getPassword())) {
 						System.out.println("Login success!");
 						frame.dispose();
@@ -80,14 +80,14 @@ public class LoginView extends View {
 						
 						// Create new view instance according to user type.
 						// AdminView
-						if (model.getLoggedInUser().getUserType().equals(User.ADMIN)) {
-							AdminModel adminModel = new AdminModel(model.getLoggedInUser());
+						if (model.getLoggedInAdministrator() != null) {
+							Administrator adminModel = model.getLoggedInAdministrator();
 							AdminController adminController = new AdminController(adminModel);
 							new AdminView(adminController, adminModel);	
 						}
 						// BranchView
-						else if (model.getLoggedInUser().getUserType().equals(User.BRANCH)) {
-							BranchModel branchModel = new BranchModel((Branch) model.getLoggedInUser());
+						else if (model.getLoggedInBranch() != null) {
+							Branch branchModel = model.getLoggedInBranch();
 							BranchController branchController = new BranchController(branchModel);
 							new BranchView(branchController, branchModel);
 						}

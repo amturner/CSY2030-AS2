@@ -10,19 +10,6 @@ public class House extends Property {
 		this.hasGarden = hasGarden;
 		this.hasGarage = hasGarage;
 	}
-
-	// Setter Methods
-	public void setNoOfFloors(int noOfFloors) {
-		this.noOfFloors = noOfFloors;
-	}
-	
-	public void setGarden(boolean value) {
-		hasGarden = value;
-	}
-	
-	public void setGarage(boolean value) {
-		hasGarage = value;
-	}
 	
 	// Getter Methods
 	public int getNoOfFloors() {
@@ -35,5 +22,18 @@ public class House extends Property {
 	
 	public boolean propertyHasGarage() {
 		return hasGarage;
+	}
+	
+	// Setter Methods
+	public void setNoOfFloors(int noOfFloors) {
+		this.noOfFloors = noOfFloors;
+	}
+	
+	public void setGarden(boolean value) {
+		hasGarden = value;
+	}
+	
+	public void setGarage(boolean value) {
+		hasGarage = value;
 	}
 }

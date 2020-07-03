@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class BranchView extends View {
 	private BranchController controller;
-	private BranchModel model;
+	private Branch model;
 	
 	// Tabbed Pane
 	private JTabbedPane tabbedPane = new JTabbedPane();
@@ -52,7 +52,7 @@ public class BranchView extends View {
 	public static final String LIST_PROPERTIES_CARD = "List Properties", EDIT_PROPERTY_CARD = "Edit Property";
 	
 	
-	public BranchView(BranchController controller, BranchModel model) {
+	public BranchView(BranchController controller, Branch model) {
 		this.controller = controller;
 		this.model = model;
 		
@@ -83,7 +83,7 @@ public class BranchView extends View {
 		listPropertiesLeftPanel.setPreferredSize(new Dimension(frame.getWidth()/2, 335));
 		//////// List Properties Panel - Inner Left - Elements
 		propertyListingsLabel = new JLabel("Listings by branch '" + model.getBranchName() + "'");
-		propertiesList = new JList(model.getPropertyChoices(BranchModel.ALL_PROPERTIES, BranchModel.UNSOLD, model.getProperties()));
+		propertiesList = new JList(model.getPropertyChoices(Branch.ALL_PROPERTIES, Branch.UNSOLD, model.getProperties()).toArray());
 		propertiesList.setSelectionMode(JList.VERTICAL);
 		propertiesList.setLayoutOrientation(JList.VERTICAL);
 		propertiesList.setVisibleRowCount(-1);
@@ -179,7 +179,7 @@ public class BranchView extends View {
 		
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				Users.saveUsers();
+				AccountManager.saveAll();
 			}
 		});
 		
@@ -379,29 +379,55 @@ public class BranchView extends View {
 	}
 	
 	public void sellProperty() {
-		if (!propertiesList.isSelectionEmpty()) {
-			try {
-				// Ask the user for the price that the property has sold for.
-				Double soldPrice = Double.parseDouble(JOptionPane.showInputDialog(null, "How much did this property sell for?", "Sell Property", JOptionPane.QUESTION_MESSAGE));
-				
-				if (soldPrice >= model.getProperty(propertiesList.getSelectedIndex()).getSellingPrice()) {
-					// Sell property.
-					model.sellProperty(propertiesList.getSelectedIndex(), soldPrice);
-					
-					// Update view branches list with latest data.
-					applyPropertiesFilter();
-					
-					// Display success dialog.
-					JOptionPane.showMessageDialog(null, "The selected property was successfully sold for £" + soldPrice + "!", "Property Sold", JOptionPane.INFORMATION_MESSAGE);
-				}
-				else {
-					// Display error dialog.
-					JOptionPane.showMessageDialog(null, "The selcted property cannot be sold for less than the current selling price.", "Error", JOptionPane.ERROR_MESSAGE);
+		if (!propertiesList.isSelectionEmpty()) {	
+			// Split string of selected property listing.
+			String str = propertiesList.getSelectedValue().toString();
+			String[] strSplit = str.split("-");
+			String[] subStrSplit = strSplit[0].split(" ");
+			
+			// Retrieve the selected property's ID from subStrSplit[1].
+			int selectedPropertyId = Integer.parseInt(subStrSplit[1]);
+			
+			// Loop through all properties until property with matching ID is found.
+			int selectedPropertyIndex = 0;
+			for (Property property: model.getProperties()) {
+				if (selectedPropertyId == property.getId()) {
+					selectedPropertyIndex = model.getProperties().indexOf(property);
+					break;
 				}
 			}
-			catch (NumberFormatException e) {
+			
+			if (!(model.getProperty(selectedPropertyIndex).getSoldPrice() > 0)) {
+				try {
+					// Ask the user for the price that the property has sold for.
+					Double soldPrice = Double.parseDouble(JOptionPane.showInputDialog(null, "How much did this property sell for?", "Sell Property", JOptionPane.QUESTION_MESSAGE));
+					
+					if (soldPrice >= model.getProperty(selectedPropertyIndex).getSellingPrice()) {
+						// Sell property.
+						model.sellProperty(selectedPropertyIndex, soldPrice);
+						
+						// Update view branches list with latest data.
+						applyPropertiesFilter();
+						
+						// Display success dialog.
+						JOptionPane.showMessageDialog(null, "The selected property was successfully sold for £" + soldPrice + "!", "Property Sold", JOptionPane.INFORMATION_MESSAGE);
+					}
+					else {
+						// Display error dialog.
+						JOptionPane.showMessageDialog(null, "The selcted property cannot be sold for less than the current selling price.", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				catch (NumberFormatException e) {
+					// Display error dialog.
+					JOptionPane.showMessageDialog(null, "The price you have entered is not a number.\n\nPlease try again!", "Error", JOptionPane.ERROR_MESSAGE);
+				}	
+				catch (NullPointerException e) {
+					
+				}
+			}
+			else {
 				// Display error dialog.
-				JOptionPane.showMessageDialog(null, "The price you have entered is not a number.\n\nPlease try again!", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "The selected property has already been sold for £" + model.getProperty(selectedPropertyIndex).getSoldPrice() +  ".", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		else {
@@ -412,13 +438,30 @@ public class BranchView extends View {
 	
 	public void deleteProperty() {
 		if (!propertiesList.isSelectionEmpty()) {
+			// Split string of selected property listing.
+			String str = propertiesList.getSelectedValue().toString();
+			String[] strSplit = str.split("-");
+			String[] subStrSplit = strSplit[0].split(" ");
+			
+			// Retrieve the selected property's ID from subStrSplit[1].
+			int selectedPropertyId = Integer.parseInt(subStrSplit[1]);
+			
+			// Loop through all properties until property with matching ID is found.
+			int selectedPropertyIndex = 0;
+			for (Property property: model.getProperties()) {
+				if (selectedPropertyId == property.getId()) {
+					selectedPropertyIndex = model.getProperties().indexOf(property);
+					break;
+				}
+			}
+			
 			// Display yes no dialog.
 			int choice = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete the selected property?", "Delete Property", JOptionPane.YES_NO_OPTION);
 			
 			// Delete the branch if user clicked "Yes".
 			if (choice == 0) {
 				// Delete property from branch.
-				model.deleteProperty(propertiesList.getSelectedIndex());
+				model.deleteProperty(selectedPropertyIndex);
 
 				// Update view branches list with latest data.
 				applyPropertiesFilter();		
@@ -436,7 +479,7 @@ public class BranchView extends View {
 	public void updatePassword() {
 		if (!settingsInnerPanel.getPasswordText().isEmpty()) {
 			// Update admin user's password.
-			model.updatePassword(settingsInnerPanel.getPasswordText());
+			model.setPassword(settingsInnerPanel.getPasswordText());
 			
 			// Display success dialog.
 			JOptionPane.showMessageDialog(null, "Your password was successfully updated!", "Password Updated", JOptionPane.INFORMATION_MESSAGE);
@@ -452,7 +495,7 @@ public class BranchView extends View {
 	
 	// Method for listing properties as specified by the user's filter choices.
 	public void applyPropertiesFilter() {
-		propertiesList.setListData(model.getPropertyChoices(propertyTypeDropdown.getSelectedItem().toString(), sellingTypeDropdown.getSelectedItem().toString(), model.getProperties()));
+		propertiesList.setListData(model.getPropertyChoices(propertyTypeDropdown.getSelectedItem().toString(), sellingTypeDropdown.getSelectedItem().toString(), model.getProperties()).toArray());
 	}
 	
 	public void searchPropertyByAddress() {
@@ -468,30 +511,54 @@ public class BranchView extends View {
 			// Update view properties list with latest data.
 			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text());
 		}
+		else if (addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && addressSearchPanel.getCityText().isEmpty() &&
+				addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
+			// Update view properties list with latest data.
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine2Text());
+		}
+		else if (addressSearchPanel.getLine1Text().isEmpty() && addressSearchPanel.getLine2Text().isEmpty() && !addressSearchPanel.getCityText().isEmpty() &&
+				addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
+			// Update view properties list with latest data.
+			properties = model.getPropertiesByAddress(addressSearchPanel.getCityText());
+		}
+		else if (addressSearchPanel.getLine1Text().isEmpty() && addressSearchPanel.getLine2Text().isEmpty() && addressSearchPanel.getCityText().isEmpty() &&
+				!addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
+			// Update view properties list with latest data.
+			properties = model.getPropertiesByAddress(addressSearchPanel.getCountyText());
+		}
+		else if (addressSearchPanel.getLine1Text().isEmpty() && addressSearchPanel.getLine2Text().isEmpty() && addressSearchPanel.getCityText().isEmpty() &&
+				addressSearchPanel.getCountyText().isEmpty() && !addressSearchPanel.getPostcodeText().isEmpty()) {
+			// Update view properties list with latest data.
+			properties = model.getPropertiesByAddress(addressSearchPanel.getPostcodeText());
+		}
 		else if (!addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && addressSearchPanel.getCityText().isEmpty() &&
 				addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
 			// Update view properties list with latest data.
-			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine1Text());
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine2Text());
 		}
 		else if (!addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && !addressSearchPanel.getCityText().isEmpty() &&
 				addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
 			// Update view properties list with latest data.
-			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine1Text(), addressSearchPanel.getCityText());
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine2Text(), addressSearchPanel.getCityText());
 		}
 		else if (!addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && !addressSearchPanel.getCityText().isEmpty() &&
 				!addressSearchPanel.getCountyText().isEmpty() && addressSearchPanel.getPostcodeText().isEmpty()) {
 			// Update view properties list with latest data.
-			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine1Text(), addressSearchPanel.getCityText(),
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine2Text(), addressSearchPanel.getCityText(),
 														addressSearchPanel.getCountyText());
 		}
 		else if (!addressSearchPanel.getLine1Text().isEmpty() && !addressSearchPanel.getLine2Text().isEmpty() && !addressSearchPanel.getCityText().isEmpty() &&
 				!addressSearchPanel.getCountyText().isEmpty() && !addressSearchPanel.getPostcodeText().isEmpty()) {
 			// Update view properties list with latest data.
-			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine1Text(), addressSearchPanel.getCityText(),
+			properties = model.getPropertiesByAddress(addressSearchPanel.getLine1Text(), addressSearchPanel.getLine2Text(), addressSearchPanel.getCityText(),
 														addressSearchPanel.getCountyText(), addressSearchPanel.getPostcodeText());
 		}
+		else {
+			properties = model.getProperties();
+			JOptionPane.showMessageDialog(null, "The address search combination you are using is currently unsupported.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
 		
-		propertiesList.setListData(model.getPropertyChoices(propertyTypeDropdown.getSelectedItem().toString(), sellingTypeDropdown.getSelectedItem().toString(), properties));
+		propertiesList.setListData(model.getPropertyChoices(propertyTypeDropdown.getSelectedItem().toString(), sellingTypeDropdown.getSelectedItem().toString(), properties).toArray());
 	}
 	
 	// Method for switching cards on a panel with the CardLayout layout.
@@ -505,22 +572,37 @@ public class BranchView extends View {
 				CardLayout cardLayout = (CardLayout) (parent.getLayout());
 				cardLayout.show(parent, name);
 				
-				Property property = model.getProperty(propertiesList.getSelectedIndex());
+				// Split string of selected property listing.
+				String str = propertiesList.getSelectedValue().toString();
+				String[] strSplit = str.split("-");
+				String[] subStrSplit = strSplit[0].split(" ");
 				
-				if (property.getClass().getName().equals(EditPropertyPanel.HOUSE)) {
-					House house = (House) property;
+				// Retrieve the selected property's ID from subStrSplit[1].
+				int selectedPropertyId = Integer.parseInt(subStrSplit[1]);
+				
+				// Loop through all properties until property with matching ID is found.
+				Property selectedProperty = null;
+				for (Property property: model.getProperties()) {
+					if (selectedPropertyId == property.getId()) {
+						selectedProperty = property;
+						break;
+					}
+				}
+				
+				if (selectedProperty.getClass().getName().equals(EditPropertyPanel.HOUSE)) {
+					House house = (House) selectedProperty;
 					editPropertyInnerPanel.fillFields(house.getName(), house.getNoOfRooms(), house.getNoOfFloors(), house.propertyHasGarden(),
 							house.propertyHasGarage(), house.getSellingPrice(), house.getSoldPrice(), house.getAddressLine1(), 
 							house.getAddressLine2(), house.getAddressCity(), house.getAddressCounty(), house.getAddressPostcode());
 				}
-				else if (property.getClass().getName().equals(EditPropertyPanel.FLAT)) {
-					Flat flat = (Flat) property;
+				else if (selectedProperty.getClass().getName().equals(EditPropertyPanel.FLAT)) {
+					Flat flat = (Flat) selectedProperty;
 					editPropertyInnerPanel.fillFields(flat.getName(), flat.getNoOfRooms(), flat.getFloorNo(), flat.getMonthlyCharge(),
 							flat.getSellingPrice(), flat.getSoldPrice(), flat.getAddressLine1(), flat.getAddressLine2(), 
 							flat.getAddressCity(), flat.getAddressCounty(), flat.getAddressPostcode());
 				}
 				
-				if (property.getSoldPrice() > 0.0)
+				if (selectedProperty.getSoldPrice() > 0.0)
 					editPropertyInnerPanel.propertySold(true);
 				else
 					editPropertyInnerPanel.propertySold(false);
