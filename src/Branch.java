@@ -248,7 +248,7 @@ public class Branch implements Serializable {
 		AccountManager.updateBranch(id, this);
 	}
 	
-	// Method for listing a property as being "sold".
+	// Method for marking property at a specificed index as being "sold".
 	public void sellProperty(int index, Double price) {
 		Property updatedProperty = properties.get(index);
 		// Update property attribute.

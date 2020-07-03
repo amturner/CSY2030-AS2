@@ -379,15 +379,34 @@ public class BranchView extends View {
 	}
 	
 	public void sellProperty() {
-		if (!propertiesList.isSelectionEmpty()) {
-			if (!(model.getProperty(propertiesList.getSelectedIndex()).getSoldPrice() > 0)) {
+		if (!propertiesList.isSelectionEmpty()) {	
+			// Split string of selected property listing.
+			String str = propertiesList.getSelectedValue().toString();
+			String[] strSplit = str.split("-");
+			String[] subStrSplit = strSplit[0].split(" ");
+			
+			// Retrieve the selected property's ID from subStrSplit[1].
+			int selectedPropertyId = Integer.parseInt(subStrSplit[1]);
+			
+			// Loop through all properties until property with matching ID is found.
+			Property selectedProperty = null;
+			int selectedPropertyIndex = 0;
+			for (Property property: model.getProperties()) {
+				if (selectedPropertyId == property.getId()) {
+					selectedProperty = property;
+					selectedPropertyIndex = model.getProperties().indexOf(property);
+					break;
+				}
+			}
+			
+			if (!(selectedProperty.getSoldPrice() > 0)) {
 				try {
 					// Ask the user for the price that the property has sold for.
 					Double soldPrice = Double.parseDouble(JOptionPane.showInputDialog(null, "How much did this property sell for?", "Sell Property", JOptionPane.QUESTION_MESSAGE));
 					
-					if (soldPrice >= model.getProperty(propertiesList.getSelectedIndex()).getSellingPrice()) {
+					if (soldPrice >= selectedProperty.getSellingPrice()) {
 						// Sell property.
-						model.sellProperty(propertiesList.getSelectedIndex(), soldPrice);
+						model.sellProperty(selectedPropertyIndex, soldPrice);
 						
 						// Update view branches list with latest data.
 						applyPropertiesFilter();
@@ -410,7 +429,7 @@ public class BranchView extends View {
 			}
 			else {
 				// Display error dialog.
-				JOptionPane.showMessageDialog(null, "The selected property has already been sold for £" + model.getProperty(propertiesList.getSelectedIndex()).getSoldPrice() +  ".", "Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "The selected property has already been sold for £" + selectedProperty.getSoldPrice() +  ".", "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		else {
